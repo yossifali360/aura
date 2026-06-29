@@ -1,0 +1,317 @@
+{
+  "nav": {
+    "home": "Home",
+    "apply": "Whitelist",
+    "apply_menu": "Apply",
+    "police": "Police",
+    "ems": "EMS",
+    "rules": "Rules",
+    "admin": "Dashboard",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "login": "Login with Discord",
+    "logout": "Logout"
+  },
+  "hero": {
+    "badge": "FiveM Community",
+    "title": "Welcome to Aura Cfw",
+    "subtitle": "Immerse yourself in a living city where every choice shapes your story. Join a community built on creativity, respect, and unforgettable roleplay.",
+    "cta_apply": "Apply Now",
+    "cta_rules": "Read Rules",
+    "stats_players": "Active Players",
+    "stats_uptime": "Server Uptime",
+    "stats_jobs": "Custom Jobs"
+  },
+  "features": {
+    "title": "Why Aura Cfw?",
+    "economy_title": "Dynamic Economy",
+    "economy_desc": "Build businesses, trade, and climb the ladder in a player-driven economy.",
+    "police_title": "Immersive Factions",
+    "police_desc": "Join PD, EMS, gangs, or create your own path in Los Santos.",
+    "events_title": "Weekly Events",
+    "events_desc": "Races, heists, community gatherings — something new every week.",
+    "support_title": "Active Staff",
+    "support_desc": "Friendly moderators and devs keeping the city fair and fun."
+  },
+  "home": {
+    "how_title": "How to Join",
+    "how_subtitle": "Four simple steps from application to your first day in Los Santos.",
+    "how_steps": [
+      {
+        "title": "Sign in with Discord",
+        "desc": "Connect your Discord account so we can verify your identity and reach you about your application."
+      },
+      {
+        "title": "Read the rules",
+        "desc": "Review server, faction, and department rules so you know what we expect before you apply."
+      },
+      {
+        "title": "Submit your application",
+        "desc": "Apply for whitelist, Police, or EMS. Tell us about your character and RP experience."
+      },
+      {
+        "title": "Get approved & play",
+        "desc": "Our staff reviews applications within 48 hours. Once approved, connect and start your story."
+      }
+    ],
+    "departments_title": "Choose Your Path",
+    "departments_subtitle": "Whether you're new to the city or ready for a dedicated faction role, we have a place for you.",
+    "departments": {
+      "whitelist": {
+        "title": "Server Whitelist",
+        "desc": "Your entry point to Aura Cfw. Build a character, find work, and explore Los Santos with the community.",
+        "apply": "Apply for Whitelist",
+        "rules": "View Rules"
+      },
+      "police": {
+        "title": "Police Department",
+        "desc": "Serve and protect with structured patrols, investigations, and high-quality law enforcement roleplay.",
+        "apply": "Apply for PD",
+        "rules": "PD Rules"
+      },
+      "ems": {
+        "title": "Medical Services",
+        "desc": "Respond to emergencies, treat patients, and bring realistic medical roleplay to every scene.",
+        "apply": "Apply for EMS",
+        "rules": "EMS Rules"
+      }
+    },
+    "cta_title": "Ready to write your story?",
+    "cta_subtitle": "Join hundreds of players in a living city built for serious, fun roleplay.",
+    "cta_apply": "Start Your Application",
+    "cta_contact": "Contact Staff",
+    "discord_title": "Join our Discord",
+    "discord_subtitle": "Connect with the community, get updates, and reach staff before you even apply.",
+    "discord_join": "Join Discord Server",
+    "discord_benefits": [
+      "Announcements, events, and server updates",
+      "Help from staff and experienced players",
+      "Required to receive application updates via DM"
+    ]
+  },
+  "apply": {
+    "title": "Server Application",
+    "subtitle": "Tell us about yourself and your character. Applications are reviewed within 48 hours.",
+    "login_required": "Sign in with Discord to submit your application.",
+    "age": "Age",
+    "age_placeholder": "Must be 16+",
+    "experience": "Roleplay Experience",
+    "experience_placeholder": "Describe your RP experience on FiveM or other platforms...",
+    "character": "Character Concept",
+    "character_placeholder": "Who is your character? Background, personality, goals...",
+    "why_join": "Why do you want to join Aura Cfw?",
+    "why_join_placeholder": "What draws you to our community?",
+    "rules_accept": "I have read and agree to the server rules",
+    "submit": "Submit Application",
+    "submitting": "Submitting...",
+    "success": "Application submitted! We'll review it soon.",
+    "status_title": "Your Application",
+    "status_pending": "Pending Review",
+    "status_approved": "Approved",
+    "status_rejected": "Rejected",
+    "thank_you_title": "Application Submitted!",
+    "thank_you_message": "Thank you for applying. Our team will review your application within 48 hours.",
+    "thank_you_close": "Got it"
+  },
+  "apply_police": {
+    "title": "Police Department Application",
+    "subtitle": "Apply to join the Aura PD. Prior law enforcement RP experience is a plus.",
+    "login_required": "Sign in with Discord to apply for the Police Department.",
+    "age": "Age",
+    "age_placeholder": "Must be 16+",
+    "experience": "Law Enforcement RP Experience",
+    "experience_placeholder": "Describe your experience as police, sheriff, or similar RP roles...",
+    "character": "Officer Background",
+    "character_placeholder": "Your officer's backstory, personality, and approach to law enforcement...",
+    "why_join": "Why do you want to join Aura PD?",
+    "why_join_placeholder": "What makes you a good fit for our department?",
+    "rules_accept": "I have read and agree to the server and PD rules",
+    "submit": "Submit Police Application",
+    "submitting": "Submitting...",
+    "success": "Police application submitted! Command will review it soon.",
+    "status_title": "Your Police Application",
+    "status_pending": "Pending Review",
+    "status_approved": "Approved",
+    "status_rejected": "Rejected",
+    "thank_you_title": "Application Submitted!",
+    "thank_you_message": "Thank you for applying. Our team will review your application within 48 hours.",
+    "thank_you_close": "Got it"
+  },
+  "apply_ems": {
+    "title": "EMS Application",
+    "subtitle": "Apply to join Aura Medical Services. Help save lives across Los Santos.",
+    "login_required": "Sign in with Discord to apply for EMS.",
+    "age": "Age",
+    "age_placeholder": "Must be 16+",
+    "experience": "Medical RP Experience",
+    "experience_placeholder": "Describe your experience as EMS, doctor, or medic in RP...",
+    "character": "Medic Background",
+    "character_placeholder": "Your character's medical background, certifications, and personality...",
+    "why_join": "Why do you want to join Aura EMS?",
+    "why_join_placeholder": "What motivates you to serve as medical personnel?",
+    "rules_accept": "I have read and agree to the server and EMS rules",
+    "submit": "Submit EMS Application",
+    "submitting": "Submitting...",
+    "success": "EMS application submitted! Medical command will review it soon.",
+    "status_title": "Your EMS Application",
+    "status_pending": "Pending Review",
+    "status_approved": "Approved",
+    "status_rejected": "Rejected",
+    "thank_you_title": "Application Submitted!",
+    "thank_you_message": "Thank you for applying. Our team will review your application within 48 hours.",
+    "thank_you_close": "Got it"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "subtitle": "Manage applications, users, rules, and settings",
+    "tabs": {
+      "whitelist": "Whitelist",
+      "police": "Police",
+      "ems": "EMS",
+      "rules": "Rules",
+      "contacts": "Contact Messages",
+      "users": "Users",
+      "settings": "Application Settings"
+    },
+    "stats": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "contacts": "Contact Messages"
+    },
+    "filters": {
+      "all_types": "All types",
+      "all_statuses": "All statuses"
+    },
+    "types": {
+      "server": "Whitelist",
+      "police": "Police",
+      "ems": "EMS"
+    },
+    "table": {
+      "user": "User",
+      "type": "Type",
+      "age": "Age",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "empty": "No applications found.",
+    "applications": {
+      "delete": "Delete application",
+      "delete_confirm": "Delete this application? The user will be able to submit a new one."
+    },
+    "empty_contacts": "No contact messages yet.",
+    "users": {
+      "discord_id": "Discord ID",
+      "role": "Role",
+      "member": "Member",
+      "you": "You",
+      "empty": "No users found."
+    },
+    "roles": {
+      "super_admin": "Super Admin",
+      "whitelist_admin": "Whitelist Admin",
+      "police_admin": "Police Admin",
+      "ems_admin": "EMS Admin",
+      "users_admin": "Users Admin"
+    },
+    "settings": {
+      "open": "Open",
+      "closed": "Closed",
+      "enable": "Enable Applications",
+      "disable": "Disable Applications",
+      "server_desc": "Allow users to apply for server whitelist.",
+      "police_desc": "Allow users to apply for the Police Department.",
+      "ems_desc": "Allow users to apply for EMS."
+    },
+    "rules": {
+      "editor_title": "Edit Server Rules",
+      "editor_desc": "Edit rules for Whitelist, Police, and EMS. Users always see these on apply pages.",
+      "english": "English",
+      "arabic": "Arabic",
+      "page_title": "Page title",
+      "page_subtitle": "Page subtitle",
+      "content": "Rules content (Markdown)",
+      "markdown_hint": "Use ## for section headings and - for bullet points.",
+      "save": "Save Rules",
+      "saved": "Rules saved successfully.",
+      "preview": "Preview",
+      "preview_en": "English preview",
+      "preview_ar": "Arabic preview",
+      "empty_preview": "No content yet."
+    },
+    "discord": {
+      "title": "Send Discord Message",
+      "subtitle": "Send a direct message to {{count}} applicant(s) from Aura Cfw Applications.",
+      "message_label": "Message",
+      "message_placeholder": "Write your message to the applicant(s)...",
+      "sender_note": "Messages are sent by the same Discord bot used for site login.",
+      "send": "Send Message",
+      "cancel": "Cancel",
+      "send_one": "Send Discord DM",
+      "send_selected": "Message Selected",
+      "select_all": "Select all applications",
+      "select_user": "Select {{name}}",
+      "selected": "{{count}} selected",
+      "result": "Sent {{sent}} message(s). {{failed}} failed."
+    }
+  },
+  "rules": {
+    "title": "Server Rules",
+    "subtitle": "Follow these guidelines to keep Aura Cfw enjoyable for everyone.",
+    "general": "General Conduct",
+    "rp": "Roleplay Standards",
+    "combat": "Combat & Crime",
+    "general_items": [
+      "Respect all players and staff at all times.",
+      "No harassment, discrimination, or hate speech.",
+      "English in public channels; other languages in private RP.",
+      "No metagaming — use only in-character knowledge.",
+      "Report issues via Discord tickets, not in-game arguments."
+    ],
+    "rp_items": [
+      "Stay in character at all times in the city.",
+      "Value your life — don't act recklessly without reason.",
+      "No random deathmatch (RDM) or vehicle deathmatch (VDM).",
+      "New Life Rule applies after death — forget prior events.",
+      "Quality over quantity — prioritize meaningful interactions."
+    ],
+    "combat_items": [
+      "Robberies and heists require proper RP buildup.",
+      "Police must be given reasonable response time.",
+      "No combat logging — remain in-game during active RP.",
+      "Gang wars require staff approval for large-scale conflict.",
+      "Exploiting bugs or glitches is strictly prohibited."
+    ]
+  },
+  "footer": {
+    "tagline": "Aura Cfw — Where stories come alive.",
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "login_failed": "Discord login failed. Please try again.",
+    "login_retry": "If you refreshed the page after logging in, start a new login instead.",
+    "login_again": "Log in with Discord"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong. Please try again.",
+    "applications_closed": "Applications are currently closed.",
+    "applications_closed_desc": "Applications are not open right now. You can still read the rules above and check back later."
+  },
+  "validation": {
+    "age_required": "Age is required.",
+    "age_min": "You must be at least 16 years old.",
+    "age_max": "Age must be 99 or less.",
+    "experience_required": "Roleplay experience is required.",
+    "experience_max": "Experience must be 2000 characters or less.",
+    "character_required": "Character concept is required.",
+    "character_max": "Character concept must be 3000 characters or less.",
+    "why_join_required": "This field is required.",
+    "why_join_max": "This field must be 2000 characters or less.",
+    "rules_required": "You must accept the rules to submit."
+  },
+  "loader": {
+    "tagline": "Loading experience"
+  }
+}

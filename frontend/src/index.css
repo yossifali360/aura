@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Orbitron", system-ui, sans-serif;
+  --font-body: "Rajdhani", system-ui, sans-serif;
+  --color-aura-50: #eef2ff;
+  --color-aura-100: #e0e7ff;
+  --color-aura-200: #c7d2fe;
+  --color-aura-300: #a5b4fc;
+  --color-aura-400: #818cf8;
+  --color-aura-500: #6366f1;
+  --color-aura-600: #4f46e5;
+  --color-aura-700: #4338ca;
+  --color-aura-800: #3730a3;
+  --color-aura-900: #312e81;
+  --color-neon-purple: #6366f1;
+  --color-neon-cyan: #818cf8;
+  --color-neon-pink: #a5b4fc;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.1), transparent);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.14), transparent);
+  }
+
+  select option {
+    @apply bg-white text-slate-900;
+  }
+
+  .dark select option {
+    @apply bg-slate-900 text-slate-100;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/20 dark:border-slate-700/50;
+  }
+
+  .neon-text {
+    @apply bg-gradient-to-r from-aura-500 to-aura-400 bg-clip-text text-transparent;
+  }
+
+  .neon-border {
+    @apply border border-aura-500/30 dark:border-aura-400/30;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgb(148 163 184 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(148 163 184 / 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
