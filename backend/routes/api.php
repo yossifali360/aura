@@ -9,7 +9,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('web')->prefix('auth/discord')->group(function (): void {
+Route::prefix('auth/discord')->group(function (): void {
     Route::get('/redirect', [AuthController::class, 'redirect']);
     Route::get('/callback', [AuthController::class, 'callback']);
 });
