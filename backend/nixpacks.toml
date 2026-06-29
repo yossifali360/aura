@@ -1,0 +1,11 @@
+[phases.build]
+cmds = [
+  "mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data",
+  "composer install --no-dev --optimize-autoloader --no-interaction",
+  "php artisan migrate --force",
+  "php artisan config:cache",
+  "php artisan route:cache",
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
