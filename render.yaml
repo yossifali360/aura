@@ -1,0 +1,59 @@
+# Render Blueprint — free backend for Aura Cfw
+# Dashboard: New → Blueprint → connect repo, or New → Web Service manually with these settings.
+#
+# Database: use Neon (free, does not expire) — https://neon.tech
+# Frontend: keep on Vercel (free)
+
+services:
+  - type: web
+    name: aura-api
+    runtime: php
+    plan: free
+    rootDir: backend
+    buildCommand: >-
+      mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data &&
+      composer install --no-dev --optimize-autoloader --no-interaction &&
+      php artisan migrate --force
+    startCommand: >-
+      php artisan config:cache &&
+      php artisan route:cache &&
+      php artisan serve --host=0.0.0.0 --port=$PORT
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: DB_CONNECTION
+        value: pgsql
+      # Set in Render dashboard after creating Neon database:
+      - key: DB_URL
+        sync: false
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: DISCORD_REDIRECT_URI
+        sync: false
+      - key: DISCORD_BOT_TOKEN
+        sync: false
+      - key: DISCORD_GUILD_ID
+        sync: false
+      - key: ADMIN_DISCORD_IDS
+        sync: false
+      - key: SANCTUM_STATEFUL_DOMAINS
+        sync: false

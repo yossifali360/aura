@@ -266,7 +266,7 @@ export function HomePage() {
               glow
               className="relative overflow-hidden border-aura-500/20 bg-gradient-to-br from-aura-500/10 via-transparent to-transparent text-center"
             >
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.1),transparent_55%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.12),transparent_55%)]" />
               <div className="relative">
                 <h2 className="font-display text-3xl font-bold md:text-4xl">{t('home.cta_title')}</h2>
                 <p className="mx-auto mt-4 max-w-xl text-slate-600 dark:text-slate-400">

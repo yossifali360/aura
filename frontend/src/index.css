@@ -5,19 +5,19 @@
 @theme {
   --font-display: "Orbitron", system-ui, sans-serif;
   --font-body: "Rajdhani", system-ui, sans-serif;
-  --color-aura-50: #eef2ff;
-  --color-aura-100: #e0e7ff;
-  --color-aura-200: #c7d2fe;
-  --color-aura-300: #a5b4fc;
-  --color-aura-400: #818cf8;
-  --color-aura-500: #6366f1;
-  --color-aura-600: #4f46e5;
-  --color-aura-700: #4338ca;
-  --color-aura-800: #3730a3;
-  --color-aura-900: #312e81;
-  --color-neon-purple: #6366f1;
-  --color-neon-cyan: #818cf8;
-  --color-neon-pink: #a5b4fc;
+  --color-aura-50: #fef2f2;
+  --color-aura-100: #fee2e2;
+  --color-aura-200: #fecaca;
+  --color-aura-300: #fca5a5;
+  --color-aura-400: #f87171;
+  --color-aura-500: #ef4444;
+  --color-aura-600: #dc2626;
+  --color-aura-700: #b91c1c;
+  --color-aura-800: #991b1b;
+  --color-aura-900: #7f1d1d;
+  --color-neon-purple: #ef4444;
+  --color-neon-cyan: #f87171;
+  --color-neon-pink: #fca5a5;
 }
 
 @layer base {
@@ -28,12 +28,12 @@
   body {
     @apply font-body antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.1), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(239 68 68 / 0.1), transparent);
   }
 
   .dark body {
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(99 102 241 / 0.14), transparent);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgb(239 68 68 / 0.14), transparent);
   }
 
   select option {

@@ -104,12 +104,12 @@ export function AppLoader({ onComplete }: AppLoaderProps) {
           <img
             src="/image.png"
             alt=""
-            className="loader-icon relative size-20 object-contain mix-blend-screen drop-shadow-[0_0_18px_rgba(99,102,241,0.35)]"
+            className="loader-icon relative size-20 object-contain mix-blend-screen drop-shadow-[0_0_18px_rgba(239,68,68,0.4)]"
           />
         </div>
 
         <h1
-          className="neon-text flex overflow-hidden font-display text-3xl font-black tracking-wider md:text-4xl"
+          className="flex overflow-hidden font-display text-3xl font-black tracking-wider text-aura-400 md:text-4xl"
           dir="ltr"
           aria-label={BRAND}
         >

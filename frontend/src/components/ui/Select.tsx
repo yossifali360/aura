@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { forwardRef, type SelectHTMLAttributes } from 'react'
 import { cn } from '@/utils/cn'
 
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   label?: string
   error?: string
   size?: 'default' | 'sm'

@@ -5,7 +5,6 @@ import {
   Ambulance,
   BookOpen,
   LayoutDashboard,
-  Mail,
   Settings,
   Shield,
   UserCog,
@@ -458,7 +457,7 @@ export function AdminDashboardPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <img
-                          src={u.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(u.first_name)}&background=6366f1&color=fff`}
+                          src={u.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(u.first_name)}&background=dc2626&color=fff`}
                           alt=""
                           className="size-8 rounded-full"
                         />
