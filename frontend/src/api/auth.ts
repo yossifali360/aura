@@ -1,7 +1,7 @@
 import axiosInstance from '@/config/axios'
 import type { ApiResponse, User } from '@/types'
 
-const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'http://localhost:8000'
+const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'https://aura.youssef-ali.com'
 
 export const getDiscordLoginUrl = (): string => `${API_BASE}/api/auth/discord/redirect`
 
