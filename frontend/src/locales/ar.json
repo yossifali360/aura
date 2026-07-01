@@ -198,7 +198,17 @@
     "empty": "لا توجد طلبات.",
     "applications": {
       "delete": "حذف الطلب",
-      "delete_confirm": "حذف هذا الطلب؟ سيتمكن المستخدم من تقديم طلب جديد."
+      "delete_confirm": "حذف هذا الطلب؟ سيتمكن المستخدم من تقديم طلب جديد.",
+      "detail": {
+        "title": "تفاصيل الطلب",
+        "preview": "عرض الطلب",
+        "close": "إغلاق",
+        "accept": "قبول",
+        "reject": "رفض",
+        "rules_yes": "نعم",
+        "rules_no": "لا",
+        "not_provided": "غير مذكور"
+      }
     },
     "empty_contacts": "لا توجد رسائل تواصل بعد.",
     "users": {

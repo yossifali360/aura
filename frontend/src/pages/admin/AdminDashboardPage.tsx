@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { ApplicationsTable } from '@/components/admin/ApplicationsTable'
+import { ApplicationDetailModal } from '@/components/admin/ApplicationDetailModal'
 import { RulesEditor } from '@/components/admin/RulesEditor'
 import { SendDiscordMessageModal } from '@/components/admin/SendDiscordMessageModal'
 import { useAuthStore } from '@/store/authStore'
@@ -101,6 +102,7 @@ export function AdminDashboardPage() {
   const [messaging, setMessaging] = useState(false)
   const [messageFeedback, setMessageFeedback] = useState('')
   const [messageFeedbackIsError, setMessageFeedbackIsError] = useState(false)
+  const [detailApplication, setDetailApplication] = useState<Application | null>(null)
 
   const isApplicationTab = tab === 'whitelist' || tab === 'police' || tab === 'ems'
   const applicationType = isApplicationTab ? TAB_TYPES[tab] : undefined
@@ -222,6 +224,10 @@ export function AdminDashboardPage() {
   }, [user, loading, tab, filterStatus, isApplicationTab, applicationType, loadApplications])
 
   useEffect(() => {
+    if (tab !== 'police') setDetailApplication(null)
+  }, [tab])
+
+  useEffect(() => {
     setSelectedIds([])
     setMessageFeedback('')
     setMessageFeedbackIsError(false)
@@ -266,7 +272,8 @@ export function AdminDashboardPage() {
   const handleStatus = async (id: number, status: Application['status']) => {
     setUpdatingId(id)
     try {
-      await updateApplicationStatus(id, status)
+      const updated = await updateApplicationStatus(id, status)
+      setDetailApplication((prev) => (prev?.id === id ? updated : prev))
       if (applicationType) {
         await loadApplications(applicationType, filterStatus)
       }
@@ -398,6 +405,7 @@ export function AdminDashboardPage() {
             onDelete={handleDelete}
             deletingId={deletingId}
             emptyMessage={t('admin.empty')}
+            onPreview={tabKey === 'police' ? setDetailApplication : undefined}
           />
         )}
       </div>
@@ -644,6 +652,17 @@ export function AdminDashboardPage() {
         }}
         onSend={handleSendMessage}
       />
+
+      {tab === 'police' && (
+        <ApplicationDetailModal
+          open={detailApplication !== null}
+          application={detailApplication}
+          applicationType="police"
+          updatingId={updatingId}
+          onClose={() => setDetailApplication(null)}
+          onStatus={handleStatus}
+        />
+      )}
     </div>
   )
 }

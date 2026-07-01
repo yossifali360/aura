@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Check, MessageSquare, Trash2, X } from 'lucide-react'
+import { Check, Eye, MessageSquare, Trash2, X } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -18,6 +18,7 @@ interface ApplicationsTableProps {
   onDelete: (id: number) => void
   deletingId: number | null
   emptyMessage: string
+  onPreview?: (app: Application) => void
 }
 
 export function ApplicationsTable({
@@ -33,6 +34,7 @@ export function ApplicationsTable({
   onDelete,
   deletingId,
   emptyMessage,
+  onPreview,
 }: ApplicationsTableProps) {
   const { t } = useTranslation()
   const allSelected = applications.length > 0 && selectedIds.length === applications.length
@@ -103,6 +105,16 @@ export function ApplicationsTable({
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex gap-1">
+                    {onPreview && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        title={t('admin.applications.detail.preview')}
+                        onClick={() => onPreview(app)}
+                      >
+                        <Eye className="size-4 text-slate-500" />
+                      </Button>
+                    )}
                     <Button
                       size="sm"
                       variant="ghost"

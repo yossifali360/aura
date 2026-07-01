@@ -198,7 +198,17 @@
     "empty": "No applications found.",
     "applications": {
       "delete": "Delete application",
-      "delete_confirm": "Delete this application? The user will be able to submit a new one."
+      "delete_confirm": "Delete this application? The user will be able to submit a new one.",
+      "detail": {
+        "title": "Application Details",
+        "preview": "View application",
+        "close": "Close",
+        "accept": "Accept",
+        "reject": "Reject",
+        "rules_yes": "Yes",
+        "rules_no": "No",
+        "not_provided": "Not provided"
+      }
     },
     "empty_contacts": "No contact messages yet.",
     "users": {
