@@ -41,8 +41,9 @@ services:
         sync: false
       - key: APP_URL
         sync: false
+      # Must match your Vercel URL exactly (comma-separate preview domains if needed)
       - key: FRONTEND_URL
-        sync: false
+        value: https://aura-cfw.vercel.app
       - key: DISCORD_CLIENT_ID
         sync: false
       - key: DISCORD_CLIENT_SECRET
