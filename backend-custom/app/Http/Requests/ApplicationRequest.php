@@ -16,7 +16,7 @@ class ApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'age' => ['required', 'integer', 'min:16', 'max:99'],
+            'age' => ['required', 'integer', 'min:17', 'max:99'],
             'experience' => ['required', 'string', 'max:2000'],
             'character_concept' => ['required', 'string', 'max:3000'],
             'why_join' => ['required', 'string', 'max:2000'],

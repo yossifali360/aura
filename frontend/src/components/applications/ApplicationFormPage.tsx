@@ -38,7 +38,8 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
   const [pendingApp, setPendingApp] = useState<Application | null>(null)
 
   const isEnabled = settings?.[type] ?? false
-  const validationSchema = useMemo(() => createApplicationSchema(t), [t])
+  const isPoliceForm = type === 'police'
+  const validationSchema = useMemo(() => createApplicationSchema(t, type), [t, type])
 
   const formik = useFormik({
     initialValues: applicationInitialValues,
@@ -149,9 +150,13 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
           <Badge variant={statusVariant(existingApp.status)} className="mt-4">
             {statusLabel(existingApp.status)}
           </Badge>
-          <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
-            {existingApp.character_concept.slice(0, 120)}...
-          </p>
+          {existingApp.character_concept && (
+            <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
+              {isPoliceForm
+                ? existingApp.character_concept
+                : `${existingApp.character_concept.slice(0, 120)}...`}
+            </p>
+          )}
         </Card>
       ) : !isEnabled ? (
         <Card glow className="text-center">
@@ -173,7 +178,7 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
               id={`${type}-age`}
               name="age"
               type="number"
-              min={16}
+              min={17}
               max={99}
               label={t(`${i18nKey}.age`)}
               placeholder={t(`${i18nKey}.age_placeholder`)}
@@ -182,36 +187,73 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
               onBlur={formik.handleBlur}
               error={(formik.touched.age || formik.submitCount > 0) ? formik.errors.age : undefined}
             />
-            <Textarea
-              id={`${type}-experience`}
-              name="experience"
-              label={t(`${i18nKey}.experience`)}
-              placeholder={t(`${i18nKey}.experience_placeholder`)}
-              value={formik.values.experience}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={(formik.touched.experience || formik.submitCount > 0) ? formik.errors.experience : undefined}
-            />
-            <Textarea
-              id={`${type}-character`}
-              name="character_concept"
-              label={t(`${i18nKey}.character`)}
-              placeholder={t(`${i18nKey}.character_placeholder`)}
-              value={formik.values.character_concept}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={(formik.touched.character_concept || formik.submitCount > 0) ? formik.errors.character_concept : undefined}
-            />
-            <Textarea
-              id={`${type}-why_join`}
-              name="why_join"
-              label={t(`${i18nKey}.why_join`)}
-              placeholder={t(`${i18nKey}.why_join_placeholder`)}
-              value={formik.values.why_join}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={(formik.touched.why_join || formik.submitCount > 0) ? formik.errors.why_join : undefined}
-            />
+            {isPoliceForm ? (
+              <>
+                <Input
+                  id={`${type}-character`}
+                  name="character_concept"
+                  label={t(`${i18nKey}.character_name`)}
+                  placeholder={t(`${i18nKey}.character_name_placeholder`)}
+                  value={formik.values.character_concept}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.character_concept || formik.submitCount > 0) ? formik.errors.character_concept : undefined}
+                />
+                <Textarea
+                  id={`${type}-why_join`}
+                  name="why_join"
+                  label={t(`${i18nKey}.why_accept`)}
+                  placeholder={t(`${i18nKey}.why_accept_placeholder`)}
+                  value={formik.values.why_join}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.why_join || formik.submitCount > 0) ? formik.errors.why_join : undefined}
+                />
+                <Textarea
+                  id={`${type}-experience`}
+                  name="experience"
+                  label={t(`${i18nKey}.police_experience`)}
+                  placeholder={t(`${i18nKey}.police_experience_placeholder`)}
+                  value={formik.values.experience}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.experience || formik.submitCount > 0) ? formik.errors.experience : undefined}
+                />
+              </>
+            ) : (
+              <>
+                <Textarea
+                  id={`${type}-experience`}
+                  name="experience"
+                  label={t(`${i18nKey}.experience`)}
+                  placeholder={t(`${i18nKey}.experience_placeholder`)}
+                  value={formik.values.experience}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.experience || formik.submitCount > 0) ? formik.errors.experience : undefined}
+                />
+                <Textarea
+                  id={`${type}-character`}
+                  name="character_concept"
+                  label={t(`${i18nKey}.character`)}
+                  placeholder={t(`${i18nKey}.character_placeholder`)}
+                  value={formik.values.character_concept}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.character_concept || formik.submitCount > 0) ? formik.errors.character_concept : undefined}
+                />
+                <Textarea
+                  id={`${type}-why_join`}
+                  name="why_join"
+                  label={t(`${i18nKey}.why_join`)}
+                  placeholder={t(`${i18nKey}.why_join_placeholder`)}
+                  value={formik.values.why_join}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.why_join || formik.submitCount > 0) ? formik.errors.why_join : undefined}
+                />
+              </>
+            )}
 
             <div className="space-y-1.5">
               <label className="flex cursor-pointer items-start gap-2">

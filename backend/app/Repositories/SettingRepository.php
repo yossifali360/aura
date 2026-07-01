@@ -187,7 +187,7 @@ MD,
 
 ## Application Requirements
 
-- Minimum age 16 with mature RP behavior.
+- Minimum age 17 with mature RP behavior.
 - Stable internet and working microphone required.
 - Prior law enforcement RP experience is recommended.
 - Read and agree to both server rules and PD regulations before applying.
@@ -213,7 +213,7 @@ MD,
 
 ## متطلبات التقديم
 
-- الحد الأدنى للعمر 16 مع سلوك RP ناضج.
+- الحد الأدنى للعمر 17 مع سلوك RP ناضج.
 - إنترنت مستقر وميكروفون يعمل مطلوبان.
 - خبرة سابقة في RP أمني مُفضّلة.
 - اقرأ ووافق على قوانين السيرفر والشرطة قبل التقديم.
@@ -245,7 +245,7 @@ MD,
 
 ## Application Requirements
 
-- Minimum age 16 with calm and respectful communication.
+- Minimum age 17 with calm and respectful communication.
 - Working microphone required for emergency response RP.
 - Basic understanding of EMS / medic roleplay is expected.
 - Read and agree to both server rules and EMS regulations before applying.
@@ -271,7 +271,7 @@ MD,
 
 ## متطلبات التقديم
 
-- الحد الأدنى للعمر 16 مع تواصل هادئ ومحترم.
+- الحد الأدنى للعمر 17 مع تواصل هادئ ومحترم.
 - ميكروفون يعمل مطلوب لـ RP الاستجابة للطوارئ.
 - فهم أساسي لـ RP الإسعاف / الطبي متوقع.
 - اقرأ ووافق على قوانين السيرفر والإسعاف قبل التقديم.

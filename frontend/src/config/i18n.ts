@@ -4,11 +4,14 @@ import en from '@/locales/en.json'
 import ar from '@/locales/ar.json'
 
 const stored = localStorage.getItem('aura-lang')
-const savedLang = stored === 'ar' ? 'ar' : 'en'
+const savedLang = stored === 'en' ? 'en' : 'ar'
 
 if (savedLang === 'ar') {
   document.documentElement.dir = 'rtl'
   document.documentElement.lang = 'ar'
+} else {
+  document.documentElement.dir = 'ltr'
+  document.documentElement.lang = 'en'
 }
 
 i18n.use(initReactI18next).init({
@@ -17,7 +20,7 @@ i18n.use(initReactI18next).init({
     ar: { translation: ar },
   },
   lng: savedLang,
-  fallbackLng: 'en',
+  fallbackLng: 'ar',
   interpolation: { escapeValue: false },
 })
 
