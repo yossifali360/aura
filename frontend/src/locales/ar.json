@@ -216,6 +216,7 @@
       "users_admin": "مشرف المستخدمين"
     },
     "settings": {
+      "applications_title": "الطلبات",
       "open": "مفتوح",
       "closed": "مغلق",
       "enable": "تفعيل الطلبات",

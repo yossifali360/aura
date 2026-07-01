@@ -60,17 +60,35 @@ export async function updateUserRole(id: number, admin_role: AdminRole | null): 
 
 export async function fetchAdminApplicationTypes(): Promise<ApplicationTypeSettings> {
   const { data } = await axiosInstance.get<ApiResponse<ApplicationTypeSettings>>('/admin/settings/application-types')
-  return data.data
+  const settings = data.data ?? (data as unknown as ApplicationTypeSettings)
+
+  if (typeof settings?.server !== 'boolean' || typeof settings?.police !== 'boolean' || typeof settings?.ems !== 'boolean') {
+    throw new Error('Invalid application types response')
+  }
+
+  return settings
 }
 
 export async function updateAdminApplicationTypes(settings: ApplicationTypeSettings): Promise<ApplicationTypeSettings> {
   const { data } = await axiosInstance.patch<ApiResponse<ApplicationTypeSettings>>('/admin/settings/application-types', settings)
-  return data.data
+  const updated = data.data ?? (data as unknown as ApplicationTypeSettings)
+
+  if (typeof updated?.server !== 'boolean' || typeof updated?.police !== 'boolean' || typeof updated?.ems !== 'boolean') {
+    throw new Error('Invalid application types response')
+  }
+
+  return updated
 }
 
 export async function fetchAdminRules(): Promise<AllRulesContent> {
   const { data } = await axiosInstance.get<ApiResponse<AllRulesContent>>('/admin/settings/rules')
-  return data.data
+  const rules = data.data ?? (data as unknown as AllRulesContent)
+
+  if (!rules?.server?.en || !rules?.police?.en || !rules?.ems?.en) {
+    throw new Error('Invalid rules response')
+  }
+
+  return rules
 }
 
 export async function updateAdminRules(rules: AllRulesContent): Promise<AllRulesContent> {

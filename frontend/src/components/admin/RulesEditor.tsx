@@ -8,7 +8,10 @@ import { Textarea } from '@/components/ui/Textarea'
 import { RulesMarkdown } from '@/components/rules/RulesMarkdown'
 import { updateAdminRules } from '@/api/admin'
 import { useRulesStore } from '@/store/rulesStore'
-import type { AllRulesContent, ApplicationType, Language, RulesLocaleContent } from '@/types'
+import type { AllRulesContent, ApplicationType, Language, RulesByLocale, RulesLocaleContent } from '@/types'
+
+const EMPTY_LOCALE: RulesLocaleContent = { title: '', subtitle: '', content: '' }
+const EMPTY_RULES_BY_LOCALE: RulesByLocale = { en: EMPTY_LOCALE, ar: EMPTY_LOCALE }
 
 interface RulesEditorProps {
   initialRules: AllRulesContent
@@ -127,7 +130,15 @@ export function RulesEditor({ initialRules, onSaved, editableTypes }: RulesEdito
     }
   }
 
-  const current = rules[ruleType]
+  const current = rules[ruleType] ?? EMPTY_RULES_BY_LOCALE
+
+  if (editableTypes.length === 0) {
+    return (
+      <Card className="text-center text-slate-500">
+        {t('common.error')}
+      </Card>
+    )
+  }
 
   return (
     <div className="space-y-6">

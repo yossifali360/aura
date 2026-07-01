@@ -19,6 +19,7 @@ import { RulesEditor } from '@/components/admin/RulesEditor'
 import { SendDiscordMessageModal } from '@/components/admin/SendDiscordMessageModal'
 import { useAuthStore } from '@/store/authStore'
 import { useApplicationSettingsStore } from '@/store/applicationSettingsStore'
+import { useRulesStore } from '@/store/rulesStore'
 import {
   fetchAdminApplications,
   fetchAdminApplicationTypes,
@@ -82,7 +83,11 @@ export function AdminDashboardPage() {
   const [contacts, setContacts] = useState<ContactMessage[]>([])
   const [users, setUsers] = useState<User[]>([])
   const [typeSettings, setTypeSettings] = useState<ApplicationTypeSettings | null>(null)
+  const [typeSettingsLoading, setTypeSettingsLoading] = useState(false)
+  const [typeSettingsError, setTypeSettingsError] = useState(false)
   const [rules, setRules] = useState<AllRulesContent | null>(null)
+  const [rulesLoading, setRulesLoading] = useState(false)
+  const [rulesError, setRulesError] = useState(false)
   const [filterStatus, setFilterStatus] = useState('')
   const [loading, setLoading] = useState(true)
   const [tabLoading, setTabLoading] = useState(false)
@@ -108,6 +113,46 @@ export function AdminDashboardPage() {
     setApplications(items)
   }, [])
 
+  const loadRulesData = useCallback(async () => {
+    if (!canManageRules(user)) return
+
+    setRulesLoading(true)
+    setRulesError(false)
+    try {
+      const data = await fetchAdminRules()
+      setRules(data)
+    } catch {
+      const fallback = useRulesStore.getState().rules
+      if (fallback) {
+        setRules(fallback)
+      } else {
+        setRulesError(true)
+      }
+    } finally {
+      setRulesLoading(false)
+    }
+  }, [user])
+
+  const loadApplicationTypesData = useCallback(async () => {
+    if (!canManageAnyApplicationTypes(user)) return
+
+    setTypeSettingsLoading(true)
+    setTypeSettingsError(false)
+    try {
+      const data = await fetchAdminApplicationTypes()
+      setTypeSettings(data)
+    } catch {
+      const fallback = useApplicationSettingsStore.getState().settings
+      if (fallback) {
+        setTypeSettings(fallback)
+      } else {
+        setTypeSettingsError(true)
+      }
+    } finally {
+      setTypeSettingsLoading(false)
+    }
+  }, [user])
+
   const loadCoreData = useCallback(async () => {
     const statsData = await fetchAdminStats()
     setStats(statsData)
@@ -115,20 +160,28 @@ export function AdminDashboardPage() {
     const tasks: Promise<void>[] = []
 
     if (canManageUsers(user)) {
-      tasks.push(fetchAdminUsers().then((data) => setUsers(data)))
+      tasks.push(fetchAdminUsers().then((data) => setUsers(data)).catch(() => undefined))
     }
     if (canManageAnyApplicationTypes(user)) {
-      tasks.push(fetchAdminApplicationTypes().then((data) => setTypeSettings(data)))
+      tasks.push(loadApplicationTypesData().catch(() => undefined))
     }
     if (canManageRules(user)) {
-      tasks.push(fetchAdminRules().then((data) => setRules(data)))
+      tasks.push(loadRulesData().catch(() => undefined))
     }
     if (canViewContacts(user)) {
-      tasks.push(fetchAdminContacts().then((data) => setContacts(data.items)))
+      tasks.push(fetchAdminContacts().then((data) => setContacts(data.items)).catch(() => undefined))
     }
 
-    await Promise.all(tasks)
-  }, [user])
+    await Promise.allSettled(tasks)
+  }, [user, loadRulesData, loadApplicationTypesData])
+
+  useEffect(() => {
+    if (!user?.is_admin || !canManageAnyApplicationTypes(user) || typeSettings) return
+    const cached = useApplicationSettingsStore.getState().settings
+    if (cached) {
+      setTypeSettings(cached)
+    }
+  }, [user, typeSettings])
 
   useEffect(() => {
     if (!user?.is_admin) {
@@ -147,6 +200,18 @@ export function AdminDashboardPage() {
       })
       .finally(() => setLoading(false))
   }, [user, navigate, loadCoreData, loadApplications])
+
+  useEffect(() => {
+    if (!user?.is_admin || loading || !isApplicationTab || !applicationType) return
+    if (!canManageApplicationType(user, applicationType)) return
+    if (typeSettings || typeSettingsLoading) return
+    void loadApplicationTypesData()
+  }, [user, loading, isApplicationTab, applicationType, typeSettings, typeSettingsLoading, loadApplicationTypesData])
+
+  useEffect(() => {
+    if (!user?.is_admin || loading || tab !== 'rules' || !canManageRules(user) || rules || rulesLoading) return
+    void loadRulesData()
+  }, [user, loading, tab, rules, rulesLoading, loadRulesData])
 
   useEffect(() => {
     if (!user?.is_admin || loading || !isApplicationTab) return
@@ -267,22 +332,33 @@ export function AdminDashboardPage() {
         {showSettings && (
           <Card className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h3 className="font-display text-lg font-bold">{typeLabel(TAB_TYPES[tabKey])}</h3>
+              <h3 className="font-display text-lg font-bold">{t('admin.settings.applications_title')}</h3>
               <p className="text-sm text-slate-500">{t(`admin.settings.${settingKey}_desc`)}</p>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant={isOpen ? 'success' : 'danger'}>
-                {isOpen ? t('admin.settings.open') : t('admin.settings.closed')}
-              </Badge>
-              <Button
-                size="sm"
-                variant={isOpen ? 'secondary' : 'primary'}
-                disabled={savingSettings || !typeSettings}
-                isLoading={savingSettings}
-                onClick={() => handleToggleType(settingKey)}
-              >
-                {isOpen ? t('admin.settings.disable') : t('admin.settings.enable')}
-              </Button>
+              {typeSettingsLoading ? (
+                <span className="size-5 animate-spin rounded-full border-2 border-aura-500 border-t-transparent" />
+              ) : (
+                <>
+                  <Badge variant={isOpen ? 'success' : 'danger'}>
+                    {isOpen ? t('admin.settings.open') : t('admin.settings.closed')}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant={isOpen ? 'secondary' : 'primary'}
+                    disabled={savingSettings || !typeSettings}
+                    isLoading={savingSettings}
+                    onClick={() => handleToggleType(settingKey)}
+                  >
+                    {isOpen ? t('admin.settings.disable') : t('admin.settings.enable')}
+                  </Button>
+                  {typeSettingsError && !typeSettings && (
+                    <Button size="sm" variant="secondary" onClick={() => void loadApplicationTypesData()}>
+                      {t('common.retry', 'Try again')}
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
           </Card>
         )}
@@ -420,12 +496,25 @@ export function AdminDashboardPage() {
         renderApplicationTab('police')
       ) : tab === 'ems' && canViewEmsTab(user) ? (
         renderApplicationTab('ems')
-      ) : tab === 'rules' && rules && canManageRules(user) ? (
-        <RulesEditor
-          initialRules={rules}
-          onSaved={setRules}
-          editableTypes={(['server', 'police', 'ems'] as const).filter((type) => canManageRulesForType(user, type))}
-        />
+      ) : tab === 'rules' && canManageRules(user) ? (
+        rulesLoading ? (
+          <div className="flex min-h-[30vh] items-center justify-center">
+            <span className="size-8 animate-spin rounded-full border-2 border-aura-500 border-t-transparent" />
+          </div>
+        ) : rules ? (
+          <RulesEditor
+            initialRules={rules}
+            onSaved={setRules}
+            editableTypes={(['server', 'police', 'ems'] as const).filter((type) => canManageRulesForType(user, type))}
+          />
+        ) : (
+          <Card className="space-y-4 text-center">
+            <p className="text-slate-500">{rulesError ? t('common.error') : t('admin.rules.empty_preview')}</p>
+            <Button size="sm" onClick={() => void loadRulesData()}>
+              {t('common.retry', 'Try again')}
+            </Button>
+          </Card>
+        )
       ) : tab === 'contacts' && canViewContacts(user) ? (
         <div className="space-y-4">
           {contacts.map((msg) => (
