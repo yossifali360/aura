@@ -6,6 +6,7 @@ import { ChevronDown, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { useAuthStore } from '@/store/authStore'
+import { useAuthHydrated } from '@/hooks/useAuthHydrated'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { cn } from '@/utils/cn'
 import { gsap } from '@/lib/gsap'
@@ -40,7 +41,9 @@ const navDropdownItemClass = ({ isActive }: { isActive: boolean }) =>
 
 export function Navbar() {
   const { t } = useTranslation()
-  const { user, logout } = useAuthStore()
+  const hydrated = useAuthHydrated()
+  const { user, token, isLoading, logout } = useAuthStore()
+  const authPending = !hydrated || (Boolean(token) && isLoading && !user)
   const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
   const headerRef = useRef<HTMLElement>(null)
@@ -164,7 +167,12 @@ export function Navbar() {
         <div className="flex items-center gap-1.5 sm:gap-2">
           <ThemeToggle />
 
-          {user ? (
+          {authPending ? (
+            <div className="hidden items-center gap-2 sm:flex">
+              <div className="size-8 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800 lg:size-9" />
+              <div className="hidden h-4 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-800 xl:block" />
+            </div>
+          ) : user ? (
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="hidden items-center gap-2 md:flex">
                 <img
@@ -237,7 +245,12 @@ export function Navbar() {
           </nav>
 
           <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800 sm:hidden">
-            {user ? (
+            {authPending ? (
+              <div className="flex items-center gap-2">
+                <div className="size-9 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
+                <div className="h-4 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
+              </div>
+            ) : user ? (
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <img

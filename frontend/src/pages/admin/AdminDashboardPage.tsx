@@ -21,6 +21,7 @@ import { RulesEditor } from '@/components/admin/RulesEditor'
 import { PoliceRosterEditor } from '@/components/admin/PoliceRosterEditor'
 import { SendDiscordMessageModal } from '@/components/admin/SendDiscordMessageModal'
 import { useAuthStore } from '@/store/authStore'
+import { useAuthHydrated } from '@/hooks/useAuthHydrated'
 import { useApplicationSettingsStore } from '@/store/applicationSettingsStore'
 import { useRulesStore } from '@/store/rulesStore'
 import {
@@ -79,7 +80,8 @@ const TYPE_SETTING_KEY: Record<'whitelist' | 'police' | 'ems', keyof Application
 export function AdminDashboardPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { user } = useAuthStore()
+  const { user, isLoading } = useAuthStore()
+  const hydrated = useAuthHydrated()
   const refreshPublicSettings = useApplicationSettingsStore((s) => s.refresh)
   const [tab, setTab] = useState<Tab>('whitelist')
   const [stats, setStats] = useState<AdminStats | null>(null)
@@ -189,6 +191,8 @@ export function AdminDashboardPage() {
   }, [user, typeSettings])
 
   useEffect(() => {
+    if (!hydrated || isLoading) return
+
     if (!user?.is_admin) {
       navigate('/', { replace: true })
       return
@@ -204,7 +208,7 @@ export function AdminDashboardPage() {
         }
       })
       .finally(() => setLoading(false))
-  }, [user, navigate, loadCoreData, loadApplications])
+  }, [hydrated, isLoading, user, navigate, loadCoreData, loadApplications])
 
   useEffect(() => {
     if (!user?.is_admin || loading || !isApplicationTab || !applicationType) return
@@ -326,6 +330,14 @@ export function AdminDashboardPage() {
     } finally {
       setSavingSettings(false)
     }
+  }
+
+  if (!hydrated || isLoading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <span className="size-8 animate-spin rounded-full border-2 border-aura-500 border-t-transparent" />
+      </div>
+    )
   }
 
   if (!user?.is_admin) return null

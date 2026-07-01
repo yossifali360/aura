@@ -29,7 +29,11 @@ export const useAuthStore = create<AuthState>()(
 
       fetchUser: async () => {
         const { token, user } = get()
-        if (!token || user) return
+
+        if (!token) {
+          set({ user: null, isLoading: false })
+          return
+        }
 
         if (inflightFetchUser) {
           await inflightFetchUser
@@ -37,10 +41,13 @@ export const useAuthStore = create<AuthState>()(
         }
 
         inflightFetchUser = (async () => {
-          set({ isLoading: true })
+          if (!user) {
+            set({ isLoading: true })
+          }
+
           try {
-            const user = await fetchCurrentUser()
-            set({ user, isLoading: false })
+            const freshUser = await fetchCurrentUser()
+            set({ user: freshUser, isLoading: false })
           } catch (error) {
             const isUnauthorized = axios.isAxiosError(error) && error.response?.status === 401
             set({
@@ -59,12 +66,17 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        set({ user: null, token: null })
+        set({ user: null, token: null, isLoading: false })
       },
     }),
     {
       name: 'aura-auth',
-      partialize: (state) => ({ token: state.token }),
+      partialize: (state) => ({ token: state.token, user: state.user }),
+      onRehydrateStorage: () => (state) => {
+        if (state?.token) {
+          void useAuthStore.getState().fetchUser()
+        }
+      },
     },
   ),
 )
