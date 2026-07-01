@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { Check, X } from 'lucide-react'
@@ -100,11 +100,11 @@ export function ApplicationDetailModal({
         if (!isUpdating) onClose()
       }}
     >
-      <Card
-        glow
-        className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div onClick={(e: MouseEvent) => e.stopPropagation()}>
+        <Card
+          glow
+          className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden"
+        >
         <div className="shrink-0 border-b border-slate-200 px-6 py-4 dark:border-slate-700">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -158,6 +158,7 @@ export function ApplicationDetailModal({
           </Button>
         </div>
       </Card>
+      </div>
     </div>,
     document.body,
   )
