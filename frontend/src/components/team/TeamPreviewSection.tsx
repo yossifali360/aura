@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ArrowRight, type LucideIcon } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { type LucideIcon } from 'lucide-react'
+// import { Button } from '@/components/ui/Button'
 import { TeamMemberCard } from '@/components/team/TeamMemberCard'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
 import type { TeamMember } from '@/data/team'
@@ -21,10 +21,10 @@ interface TeamPreviewSectionProps {
 
 export function TeamPreviewSection({
   members,
-  teamTo,
+  teamTo: _teamTo,
   titleKey,
   subtitleKey,
-  meetTeamKey = 'team.meet_team',
+  meetTeamKey: _meetTeamKey = 'team.meet_team',
   icon: Icon,
   maxPreview = 4,
 }: TeamPreviewSectionProps) {
@@ -63,14 +63,14 @@ export function TeamPreviewSection({
           <p className="text-center text-slate-500">{t('team.empty')}</p>
         )}
 
-        <div className="mt-10 text-center">
+        {/* <div className="mt-10 text-center">
           <Link to={teamTo}>
             <Button size="lg">
               {t(meetTeamKey)}
               <ArrowRight className="size-5" />
             </Button>
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   )
