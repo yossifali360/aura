@@ -276,12 +276,26 @@
       "position": "Position",
       "discord_username": "Discord Username",
       "discord_id": "Discord ID",
+      "discord_user": "Discord Account",
+      "discord_user_placeholder": "Select a police user...",
+      "discord_user_empty": "No eligible police users found. Approve a police application or assign the police admin role first.",
+      "police_roles": {
+        "police_admin": "Police Admin",
+        "approved_applicant": "Approved Police Applicant"
+      },
       "points": "Points",
       "points_exempt": "Exempt from points",
       "warnings": "Warnings",
       "joined_at": "Join Date",
       "last_promotion": "Last Promotion",
-      "specialties": "Specialties"
+      "specialties": "Specialties",
+      "filter_title": "Search & Filters",
+      "filter_search_placeholder": "Search by name...",
+      "filter_all": "All",
+      "filter_clear": "Clear filters",
+      "filter_no_results": "No members match your filters.",
+      "view_title": "Member Details",
+      "view_member": "View details"
     }
   },
   "police": {
@@ -348,7 +362,51 @@
       "details": "Service Details",
       "record": "Record & Dates",
       "exempt": "Exempt",
+      "vehicles_title": "Available Vehicles",
+      "vehicles_empty": "No vehicles are assigned to your rank or position yet.",
       "back_team": "Back to Police Team"
+    },
+    "vehicles": {
+      "ford_victoria": {
+        "name": "Ford Victoria",
+        "requirement": "First Soldier rank and above"
+      },
+      "ford_explorer": {
+        "name": "Ford Explorer",
+        "requirement": "First Corporal rank and above"
+      },
+      "chevrolet_silverado": {
+        "name": "Chevrolet Silverado",
+        "requirement": "Sergeant rank and above"
+      },
+      "dodge_charger": {
+        "name": "Dodge Charger",
+        "requirement": "Lieutenant rank and above"
+      },
+      "dodge_durango": {
+        "name": "Dodge Durango",
+        "requirement": "Captain rank and above"
+      },
+      "dodge_challenger": {
+        "name": "Dodge Challenger",
+        "requirement": "Investigation unit heads only"
+      },
+      "bmw_m5": {
+        "name": "BMW M5",
+        "requirement": "Lieutenant Colonel rank and above"
+      },
+      "chevrolet_camaro": {
+        "name": "Chevrolet Camaro",
+        "requirement": "Major rank and above"
+      },
+      "porsche_gt3": {
+        "name": "Porsche GT3",
+        "requirement": "Interior Minister only"
+      },
+      "bmw_m3": {
+        "name": "BMW M3",
+        "requirement": "Deputy Interior Minister only"
+      }
     }
   },
   "rules": {

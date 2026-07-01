@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, LogIn, Shield } from 'lucide-react'
+import { ArrowLeft, Car, LogIn, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
-import { fetchMyPoliceProfile } from '@/api/police'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { useAuthStore } from '@/store/authStore'
+import { usePoliceProfile } from '@/hooks/usePoliceProfile'
+import { useDiscordAvatars } from '@/hooks/useDiscordAvatars'
 import { getDiscordAvatarUrl } from '@/utils/discordAvatar'
-import { POLICE_SPECIALTY_FIELDS, type PoliceMember } from '@/types/police'
+import { POLICE_SPECIALTY_FIELDS } from '@/types/police'
+import { getAvailablePoliceVehicles } from '@/utils/policeVehicles'
 
-function formatDate(value: string | null, locale: string) {
+function formatDate(value: string | null) {
   if (!value) return '—'
-  return new Date(value).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
+  return new Date(value).toLocaleDateString('ar-EG', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -25,8 +27,8 @@ function SpecialtyBadge({ status, label }: { status: string; label: string }) {
   const variant = status === 'certified' ? 'success' : status === 'training' ? 'warning' : 'default'
 
   return (
-    <div className="rounded-xl border border-cyan-500/30 bg-slate-900/40 px-3 py-2 text-center">
-      <p className="text-xs font-semibold text-slate-300">{label}</p>
+    <div className="rounded-xl border border-slate-200/80 bg-slate-50 px-3 py-2 text-center dark:border-cyan-500/30 dark:bg-slate-900/40">
+      <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{label}</p>
       <Badge variant={variant} className="mt-1">
         {t(`police.specialty_statuses.${status}`, status)}
       </Badge>
@@ -35,43 +37,25 @@ function SpecialtyBadge({ status, label }: { status: string; label: string }) {
 }
 
 export function PoliceProfilePage() {
-  const { t, i18n } = useTranslation()
-  const { user, token } = useAuthStore()
-  const [profile, setProfile] = useState<PoliceMember | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
+  const { t } = useTranslation()
+  const { user } = useAuthStore()
+  const { profile, loading, notFound, isError } = usePoliceProfile()
+  const [imageFailed, setImageFailed] = useState(false)
+
+  const discordId = profile?.discord_id ?? ''
+  const fetchedAvatars = useDiscordAvatars(discordId ? [discordId] : [])
 
   useEffect(() => {
-    if (!user || !token) {
-      setLoading(false)
-      return
-    }
+    setImageFailed(false)
+  }, [discordId, user?.avatar, fetchedAvatars[discordId]])
 
-    let active = true
-    setLoading(true)
-    setNotFound(false)
+  const resolvedAvatarUrl =
+    fetchedAvatars[discordId] ??
+    (user?.discord_id === discordId ? user.avatar ?? undefined : undefined)
 
-    fetchMyPoliceProfile()
-      .then((data) => {
-        if (!active) return
-        if (!data) {
-          setNotFound(true)
-          setProfile(null)
-        } else {
-          setProfile(data)
-        }
-      })
-      .catch(() => {
-        if (active) setNotFound(true)
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-
-    return () => {
-      active = false
-    }
-  }, [user, token])
+  const avatar = imageFailed
+    ? getDiscordAvatarUrl('', undefined, profile?.name)
+    : getDiscordAvatarUrl(discordId, resolvedAvatarUrl, profile?.name)
 
   if (!user) {
     return (
@@ -97,7 +81,7 @@ export function PoliceProfilePage() {
     )
   }
 
-  if (notFound || !profile) {
+  if (notFound || isError || !profile) {
     return (
       <div className="mx-auto max-w-lg px-4 py-20 text-center">
         <Card glow className="space-y-4">
@@ -115,16 +99,21 @@ export function PoliceProfilePage() {
     )
   }
 
-  const avatar = getDiscordAvatarUrl(profile.discord_id ?? '', undefined, profile.name)
   const pointsLabel = profile.points_exempt
     ? t('police.profile.exempt')
     : profile.points?.toString() ?? '0'
+  const availableVehicles = getAvailablePoliceVehicles(profile)
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-16">
       <div className="mb-10 text-center">
         <div className="mx-auto mb-4 size-28 overflow-hidden rounded-2xl ring-2 ring-aura-500/30">
-          <img src={avatar} alt={profile.name} className="size-full object-cover" />
+          <img
+            src={avatar}
+            alt={profile.name}
+            className="size-full object-cover"
+            onError={() => setImageFailed(true)}
+          />
         </div>
         <h1 className="font-display text-3xl font-bold">{profile.name}</h1>
         <p className="mt-2 text-slate-500">
@@ -153,12 +142,6 @@ export function PoliceProfilePage() {
                 <dd className="font-medium">{profile.position}</dd>
               </div>
             )}
-            {profile.shoulder_rank && (
-              <div className="flex justify-between gap-4">
-                <dt className="text-slate-500">{t('admin.roster.shoulder_rank')}</dt>
-                <dd className="font-medium">{profile.shoulder_rank}</dd>
-              </div>
-            )}
             {profile.discord_username && (
               <div className="flex justify-between gap-4">
                 <dt className="text-slate-500">{t('admin.roster.discord_username')}</dt>
@@ -173,11 +156,11 @@ export function PoliceProfilePage() {
           <dl className="space-y-3 text-sm">
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">{t('admin.roster.joined_at')}</dt>
-              <dd className="font-medium">{formatDate(profile.joined_at, i18n.language)}</dd>
+              <dd className="font-medium">{formatDate(profile.joined_at)}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">{t('admin.roster.last_promotion')}</dt>
-              <dd className="font-medium">{formatDate(profile.last_promotion_date, i18n.language)}</dd>
+              <dd className="font-medium">{formatDate(profile.last_promotion_date)}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">{t('admin.roster.points')}</dt>
@@ -190,6 +173,32 @@ export function PoliceProfilePage() {
           </dl>
         </Card>
       </div>
+
+      <Card className="mt-4">
+        <h2 className="mb-4 font-display text-lg font-bold">{t('police.profile.vehicles_title')}</h2>
+        {availableVehicles.length === 0 ? (
+          <p className="text-sm text-slate-500">{t('police.profile.vehicles_empty')}</p>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {availableVehicles.map((vehicleId) => (
+              <div
+                key={vehicleId}
+                className="flex items-start gap-3 rounded-xl border border-slate-200/80 bg-slate-50 px-4 py-3 dark:border-cyan-500/30 dark:bg-slate-900/40"
+              >
+                <Car className="mt-0.5 size-5 shrink-0 text-aura-600 dark:text-aura-400" />
+                <div>
+                  <p className="font-semibold text-slate-900 dark:text-slate-100">
+                    {t(`police.vehicles.${vehicleId}.name`)}
+                  </p>
+                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    {t(`police.vehicles.${vehicleId}.requirement`)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
 
       <Card className="mt-4">
         <h2 className="mb-4 font-display text-lg font-bold">{t('admin.roster.specialties')}</h2>

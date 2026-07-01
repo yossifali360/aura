@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from '@/config/queryClient'
 import { MainLayout } from '@/components/layout/MainLayout'
 import { ScrollToTop } from '@/components/layout/ScrollToTop'
 import { HomePage } from '@/pages/HomePage'
@@ -13,7 +15,8 @@ import { TeamPage } from '@/pages/TeamPage'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
       <ScrollToTop />
       <Routes>
         <Route element={<MainLayout />}>
@@ -33,5 +36,6 @@ export default function App() {
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
       </Routes>
     </BrowserRouter>
+    </QueryClientProvider>
   )
 }

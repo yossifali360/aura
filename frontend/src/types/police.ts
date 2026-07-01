@@ -101,6 +101,18 @@ export interface PoliceOptions {
   specialty_fields: PoliceSpecialtyField[]
 }
 
+export type PoliceLinkableRole = 'police_admin' | 'approved_applicant'
+
+export interface PoliceLinkableUser {
+  id: number
+  discord_id: string
+  username: string
+  first_name: string
+  avatar: string | null
+  police_role: PoliceLinkableRole
+  has_approved_police_application: boolean
+}
+
 export const POLICE_SECTION_ORDER: PoliceMemberSection[] = [
   'ministry_leadership',
   'executive_leadership',
@@ -111,6 +123,18 @@ export const POLICE_SECTION_ORDER: PoliceMemberSection[] = [
   'soldiers',
   'academy',
 ]
+
+export const POLICE_SECTION_LABELS_AR: Record<PoliceMemberSection, string> = {
+  ministry_leadership: 'قيادات الوزارة',
+  executive_leadership: 'القيادات التنفيذية',
+  officers: 'الضباط',
+  secretaries: 'الأمناء',
+  sergeants: 'الرقباء',
+  corporals: 'العرفاء',
+  soldiers: 'الجنود',
+  academy: 'الأكاديمية',
+}
+
 export const POLICE_SPECIALTY_FIELDS: PoliceSpecialtyField[] = [
   'specialty_speed',
   'specialty_motor',

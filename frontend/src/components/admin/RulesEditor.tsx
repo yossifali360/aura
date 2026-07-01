@@ -35,9 +35,7 @@ function LocaleFields({
 
   return (
     <div className="space-y-4" dir={isRtl ? 'rtl' : 'ltr'}>
-      <h4 className="font-display text-base font-bold">
-        {locale === 'en' ? t('admin.rules.english') : t('admin.rules.arabic')}
-      </h4>
+      <h4 className="font-display text-base font-bold">{t('admin.rules.arabic')}</h4>
       <Input
         id={`${idPrefix}-${locale}-title`}
         label={t('admin.rules.page_title')}
@@ -72,9 +70,7 @@ function LocalePreview({ locale, values }: { locale: Language; values: RulesLoca
 
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'}>
-      <h4 className="mb-4 font-display text-base font-bold">
-        {locale === 'en' ? t('admin.rules.preview_en') : t('admin.rules.preview_ar')}
-      </h4>
+      <h4 className="mb-4 font-display text-base font-bold">{t('admin.rules.preview_ar')}</h4>
       <div className={`mb-6 text-center ${isRtl ? 'text-right md:text-center' : ''}`}>
         <h1 className="font-display text-xl font-bold">{values.title || '—'}</h1>
         <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{values.subtitle || '—'}</p>
@@ -167,20 +163,12 @@ export function RulesEditor({ initialRules, onSaved, editableTypes }: RulesEdito
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <LocaleFields
-            locale="en"
-            idPrefix={ruleType}
-            values={current.en}
-            onChange={(field, value) => updateLocale('en', field, value)}
-          />
-          <LocaleFields
-            locale="ar"
-            idPrefix={ruleType}
-            values={current.ar}
-            onChange={(field, value) => updateLocale('ar', field, value)}
-          />
-        </div>
+        <LocaleFields
+          locale="ar"
+          idPrefix={ruleType}
+          values={current.ar}
+          onChange={(field, value) => updateLocale('ar', field, value)}
+        />
 
         <p className="mt-4 text-xs text-slate-500">{t('admin.rules.markdown_hint')}</p>
 
@@ -193,14 +181,9 @@ export function RulesEditor({ initialRules, onSaved, editableTypes }: RulesEdito
         </div>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card glow>
-          <LocalePreview locale="en" values={current.en} />
-        </Card>
-        <Card glow>
-          <LocalePreview locale="ar" values={current.ar} />
-        </Card>
-      </div>
+      <Card glow>
+        <LocalePreview locale="ar" values={current.ar} />
+      </Card>
     </div>
   )
 }

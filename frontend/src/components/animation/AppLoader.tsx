@@ -1,8 +1,8 @@
+/* @refresh reset */
 import { useGSAP } from '@gsap/react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gsap } from '@/lib/gsap'
-import { cn } from '@/utils/cn'
 
 const BRAND = 'Aura Cfw'
 
@@ -11,8 +11,7 @@ type AppLoaderProps = {
 }
 
 export function AppLoader({ onComplete }: AppLoaderProps) {
-  const { t, i18n } = useTranslation()
-  const isRtl = i18n.language === 'ar'
+  const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(true)
 
@@ -125,12 +124,9 @@ export function AppLoader({ onComplete }: AppLoaderProps) {
         </h1>
 
         <p
-          className={cn(
-            'loader-tagline mt-2 text-sm text-slate-500',
-            isRtl ? 'tracking-normal' : 'uppercase tracking-[0.35em]',
-          )}
-          dir={isRtl ? 'rtl' : 'ltr'}
-          lang={i18n.language}
+          className="loader-tagline mt-2 text-sm tracking-normal text-slate-500"
+          dir="rtl"
+          lang="ar"
         >
           {t('loader.tagline')}
         </p>

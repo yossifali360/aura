@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePoliceMemberRequest;
 use App\Http\Requests\UpdatePoliceMemberRequest;
+use App\Http\Resources\PoliceLinkableUserResource;
 use App\Http\Resources\PoliceMemberResource;
 use App\Services\PoliceMemberService;
 use Illuminate\Http\JsonResponse;
@@ -53,6 +54,19 @@ class PoliceMemberController extends Controller
     {
         return response()->json([
             'data' => PoliceMemberResource::collection($this->service->rosterForAdmin($request->user())),
+        ]);
+    }
+
+    public function linkableUsers(Request $request): JsonResponse
+    {
+        $exceptMemberId = $request->filled('except_member_id')
+            ? $request->integer('except_member_id')
+            : null;
+
+        return response()->json([
+            'data' => PoliceLinkableUserResource::collection(
+                $this->service->linkableUsers($request->user(), $exceptMemberId),
+            ),
         ]);
     }
 

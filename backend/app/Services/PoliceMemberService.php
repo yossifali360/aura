@@ -14,14 +14,17 @@ use App\Http\Requests\UpdatePoliceMemberRequest;
 use App\Models\PoliceMember;
 use App\Models\User;
 use App\Repositories\PoliceMemberRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 class PoliceMemberService
 {
-    public function __construct(protected PoliceMemberRepository $repository)
-    {
+    public function __construct(
+        protected PoliceMemberRepository $repository,
+        protected UserRepository $userRepository,
+    ) {
     }
 
     public function rosterForPublic(): array
@@ -36,6 +39,13 @@ class PoliceMemberService
         $this->ensureManageAccess($actor);
 
         return $this->repository->allOrdered();
+    }
+
+    public function linkableUsers(User $actor, ?int $exceptMemberId = null): Collection
+    {
+        $this->ensureManageAccess($actor);
+
+        return $this->userRepository->linkableForPoliceRoster($exceptMemberId);
     }
 
     public function profileForUser(User $user): ?PoliceMember

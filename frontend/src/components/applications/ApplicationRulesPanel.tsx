@@ -1,19 +1,16 @@
-import { useTranslation } from 'react-i18next'
 import { BookOpen } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { RulesMarkdown } from '@/components/rules/RulesMarkdown'
 import { useRulesStore } from '@/store/rulesStore'
-import type { ApplicationType, Language } from '@/types'
+import type { ApplicationType } from '@/types'
 
 interface ApplicationRulesPanelProps {
   type: ApplicationType
 }
 
 export function ApplicationRulesPanel({ type }: ApplicationRulesPanelProps) {
-  const { i18n } = useTranslation()
   const getForType = useRulesStore((s) => s.getForType)
-  const locale = (i18n.language === 'ar' ? 'ar' : 'en') as Language
-  const content = getForType(type, locale)
+  const content = getForType(type, 'ar')
 
   if (!content) return null
 

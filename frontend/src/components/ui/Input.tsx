@@ -22,6 +22,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           'w-full rounded-xl border border-slate-200 bg-white/80 px-4 py-2.5 text-slate-900 placeholder:text-slate-400 transition focus:border-aura-500 focus:outline-none focus:ring-2 focus:ring-aura-500/20 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder:text-slate-500',
           type === 'number' &&
             '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+          type === 'date' &&
+            '[&::-webkit-calendar-picker-indicator]:cursor-pointer dark:[color-scheme:dark] dark:[&::-webkit-calendar-picker-indicator]:invert',
           error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
           className,
         )}

@@ -1,37 +1,27 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { fetchMyPoliceProfile } from '@/api/police'
 import { useAuthStore } from '@/store/authStore'
-import type { PoliceMember } from '@/types/police'
+
+export const policeProfileQueryKey = ['police', 'me'] as const
 
 export function usePoliceProfile() {
   const { user, token } = useAuthStore()
-  const [profile, setProfile] = useState<PoliceMember | null>(null)
-  const [loading, setLoading] = useState(false)
+  const enabled = Boolean(user && token)
 
-  useEffect(() => {
-    if (!user || !token) {
-      setProfile(null)
-      return
-    }
+  const query = useQuery({
+    queryKey: policeProfileQueryKey,
+    queryFn: fetchMyPoliceProfile,
+    enabled,
+  })
 
-    let active = true
-    setLoading(true)
+  const profile = query.data ?? null
 
-    fetchMyPoliceProfile()
-      .then((data) => {
-        if (active) setProfile(data)
-      })
-      .catch(() => {
-        if (active) setProfile(null)
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-
-    return () => {
-      active = false
-    }
-  }, [user, token])
-
-  return { profile, loading, hasProfile: !!profile }
+  return {
+    profile,
+    loading: enabled && query.isPending,
+    hasProfile: Boolean(profile),
+    notFound: enabled && query.isSuccess && profile === null,
+    isError: query.isError,
+    refetch: query.refetch,
+  }
 }

@@ -276,12 +276,26 @@
       "position": "المنصب",
       "discord_username": "اسم Discord",
       "discord_id": "معرف Discord",
+      "discord_user": "حساب Discord",
+      "discord_user_placeholder": "اختر مستخدم شرطة...",
+      "discord_user_empty": "لا يوجد مستخدمون مؤهلون. وافق على طلب شرطة أو عيّن دور مشرف الشرطة أولاً.",
+      "police_roles": {
+        "police_admin": "مشرف الشرطة",
+        "approved_applicant": "متقدم شرطة مقبول"
+      },
       "points": "النقاط",
       "points_exempt": "معفى من النقاط",
       "warnings": "الإنذارات",
       "joined_at": "تاريخ الدخول",
       "last_promotion": "آخر ترقية",
-      "specialties": "التخصصات"
+      "specialties": "التخصصات",
+      "filter_title": "بحث وتصفية",
+      "filter_search_placeholder": "بحث بالاسم...",
+      "filter_all": "الكل",
+      "filter_clear": "مسح التصفية",
+      "filter_no_results": "لا يوجد أعضاء مطابقون للتصفية.",
+      "view_title": "تفاصيل العضو",
+      "view_member": "عرض التفاصيل"
     }
   },
   "police": {
@@ -348,7 +362,51 @@
       "details": "تفاصيل الخدمة",
       "record": "السجل والتواريخ",
       "exempt": "معفى",
+      "vehicles_title": "المركبات المتاحة",
+      "vehicles_empty": "لا توجد مركبات متاحة لرتبتك أو منصبك حالياً.",
       "back_team": "العودة لفريق الشرطة"
+    },
+    "vehicles": {
+      "ford_victoria": {
+        "name": "Ford Victoria",
+        "requirement": "جندي أول فما فوق"
+      },
+      "ford_explorer": {
+        "name": "Ford Explorer",
+        "requirement": "عريف أول فما فوق"
+      },
+      "chevrolet_silverado": {
+        "name": "Chevrolet Silverado",
+        "requirement": "رقيب فما فوق"
+      },
+      "dodge_charger": {
+        "name": "Dodge Charger",
+        "requirement": "ملازم فما فوق"
+      },
+      "dodge_durango": {
+        "name": "Dodge Durango",
+        "requirement": "نقيب فما فوق"
+      },
+      "dodge_challenger": {
+        "name": "Dodge Challenger",
+        "requirement": "رؤساء وحدة المباحث فقط"
+      },
+      "bmw_m5": {
+        "name": "BMW M5",
+        "requirement": "مقدم فما أعلى"
+      },
+      "chevrolet_camaro": {
+        "name": "Chevrolet Camaro",
+        "requirement": "رائد فما فوق"
+      },
+      "porsche_gt3": {
+        "name": "Porsche GT3",
+        "requirement": "وزير الداخلية فقط"
+      },
+      "bmw_m3": {
+        "name": "BMW M3",
+        "requirement": "نائب وزير الداخلية فقط"
+      }
     }
   },
   "rules": {

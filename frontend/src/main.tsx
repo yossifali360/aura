@@ -9,13 +9,12 @@ import { AppLoader } from '@/components/animation/AppLoader'
 import App from './App'
 import './index.css'
 
-function Bootstrap() {
+function AppBootstrap() {
   const fetchUser = useAuthStore((s) => s.fetchUser)
   const loadApplicationSettings = useApplicationSettingsStore((s) => s.load)
   const loadRules = useRulesStore((s) => s.load)
   const setTheme = useThemeStore((s) => s.setTheme)
   const theme = useThemeStore((s) => s.theme)
-  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     setTheme(theme)
@@ -27,16 +26,21 @@ function Bootstrap() {
     loadRules()
   }, [fetchUser, loadApplicationSettings, loadRules])
 
+  return <App />
+}
+
+function Root() {
+  const [ready, setReady] = useState(false)
+
+  if (!ready) {
+    return <AppLoader onComplete={() => setReady(true)} />
+  }
+
   return (
-    <>
-      {!ready && <AppLoader onComplete={() => setReady(true)} />}
-      {ready && <App />}
-    </>
+    <StrictMode>
+      <AppBootstrap />
+    </StrictMode>
   )
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Bootstrap />
-  </StrictMode>,
-)
+createRoot(document.getElementById('root')!).render(<Root />)

@@ -5,7 +5,6 @@ import { useGSAP } from '@gsap/react'
 import { ChevronDown, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
-import { LangToggle } from '@/components/layout/LangToggle'
 import { useAuthStore } from '@/store/authStore'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { cn } from '@/utils/cn'
@@ -40,7 +39,7 @@ const navDropdownItemClass = ({ isActive }: { isActive: boolean }) =>
   )
 
 export function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { user, logout } = useAuthStore()
   const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
@@ -48,7 +47,7 @@ export function Navbar() {
   const applyRef = useRef<HTMLDivElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [applyOpen, setApplyOpen] = useState(false)
-  const isRtl = i18n.language === 'ar'
+  const isRtl = true
 
   const applyLinks = [
     { to: '/apply', label: t('nav.apply') },
@@ -71,7 +70,7 @@ export function Navbar() {
   useEffect(() => {
     setMobileOpen(false)
     setApplyOpen(false)
-  }, [i18n.language])
+  }, [location.pathname])
 
   useEffect(() => {
     if (!applyOpen) return
@@ -163,7 +162,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <LangToggle className="hidden sm:flex" />
           <ThemeToggle />
 
           {user ? (
@@ -239,7 +237,6 @@ export function Navbar() {
           </nav>
 
           <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800 sm:hidden">
-            <LangToggle />
             {user ? (
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">

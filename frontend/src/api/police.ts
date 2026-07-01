@@ -1,6 +1,6 @@
 import axiosInstance from '@/config/axios'
 import type { ApiResponse } from '@/types'
-import type { PoliceMember, PoliceOptions, PoliceRosterGrouped } from '@/types/police'
+import type { PoliceLinkableUser, PoliceMember, PoliceOptions, PoliceRosterGrouped } from '@/types/police'
 import { formToPolicePayload, type PoliceMemberFormData } from '@/types/police'
 
 export async function fetchPublicPoliceRoster(): Promise<PoliceRosterGrouped> {
@@ -20,6 +20,13 @@ export async function fetchMyPoliceProfile(): Promise<PoliceMember | null> {
 
 export async function fetchAdminPoliceMembers(): Promise<PoliceMember[]> {
   const { data } = await axiosInstance.get<ApiResponse<PoliceMember[]>>('/admin/police/members')
+  return data.data
+}
+
+export async function fetchLinkablePoliceUsers(exceptMemberId?: number): Promise<PoliceLinkableUser[]> {
+  const { data } = await axiosInstance.get<ApiResponse<PoliceLinkableUser[]>>('/admin/police/linkable-users', {
+    params: exceptMemberId ? { except_member_id: exceptMemberId } : undefined,
+  })
   return data.data
 }
 

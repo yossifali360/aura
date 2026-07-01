@@ -27,8 +27,7 @@ export function AuthCallbackPage() {
     }
 
     setToken(token).then(() => {
-      const user = useAuthStore.getState().user
-      navigate(user ? '/apply' : '/', { replace: true })
+      navigate('/', { replace: true })
     })
   }, [params, setToken, navigate, t])
 

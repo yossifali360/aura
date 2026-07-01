@@ -23,12 +23,27 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-y: auto;
   }
 
   body {
     @apply font-body antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    min-height: 100vh;
+    overflow-y: visible;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -20%, rgb(239 68 68 / 0.1), transparent);
+  }
+
+  /* Hide scrollbars on nested areas; keep the main page (html) scrollbar visible */
+  :where(:not(html)) {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  :where(:not(html))::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .dark body {

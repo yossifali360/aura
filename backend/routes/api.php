@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/settings/rules', [AdminController::class, 'rules']);
     Route::patch('/settings/rules', [AdminController::class, 'updateRules']);
     Route::get('/police/members', [PoliceMemberController::class, 'index']);
+    Route::get('/police/linkable-users', [PoliceMemberController::class, 'linkableUsers']);
     Route::post('/police/members', [PoliceMemberController::class, 'store']);
     Route::patch('/police/members/{id}', [PoliceMemberController::class, 'update']);
     Route::delete('/police/members/{id}', [PoliceMemberController::class, 'destroy']);
