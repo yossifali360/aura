@@ -1,4 +1,4 @@
-import type { AdminRole, User } from '@/types'
+import type { AdminRole, ApplicationType, User } from '@/types'
 
 export function getEffectiveAdminRole(user: User | null | undefined): AdminRole | null {
   if (!user?.is_admin) return null
@@ -21,7 +21,35 @@ export function canViewEmsTab(user: User | null | undefined): boolean {
 }
 
 export function canManageRules(user: User | null | undefined): boolean {
-  return getEffectiveAdminRole(user) === 'super_admin'
+  const role = getEffectiveAdminRole(user)
+  return role === 'super_admin' || role === 'police_admin' || role === 'ems_admin'
+}
+
+export function canManageRulesForType(user: User | null | undefined, type: ApplicationType): boolean {
+  const role = getEffectiveAdminRole(user)
+  if (role === 'super_admin') return true
+  if (role === 'police_admin' && type === 'police') return true
+  if (role === 'ems_admin' && type === 'ems') return true
+  return false
+}
+
+export function canManageApplicationType(user: User | null | undefined, type: ApplicationType): boolean {
+  const role = getEffectiveAdminRole(user)
+  if (role === 'super_admin') return true
+  if (role === 'whitelist_admin' && type === 'server') return true
+  if (role === 'police_admin' && type === 'police') return true
+  if (role === 'ems_admin' && type === 'ems') return true
+  return false
+}
+
+export function canManageAnyApplicationTypes(user: User | null | undefined): boolean {
+  const role = getEffectiveAdminRole(user)
+  return (
+    role === 'super_admin' ||
+    role === 'whitelist_admin' ||
+    role === 'police_admin' ||
+    role === 'ems_admin'
+  )
 }
 
 export function canViewContacts(user: User | null | undefined): boolean {

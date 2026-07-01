@@ -13,6 +13,7 @@ import type { AllRulesContent, ApplicationType, Language, RulesLocaleContent } f
 interface RulesEditorProps {
   initialRules: AllRulesContent
   onSaved: (rules: AllRulesContent) => void
+  editableTypes: readonly ApplicationType[]
 }
 
 function LocaleFields({
@@ -84,17 +85,23 @@ function LocalePreview({ locale, values }: { locale: Language; values: RulesLoca
   )
 }
 
-export function RulesEditor({ initialRules, onSaved }: RulesEditorProps) {
+export function RulesEditor({ initialRules, onSaved, editableTypes }: RulesEditorProps) {
   const { t } = useTranslation()
   const refreshPublicRules = useRulesStore((s) => s.refresh)
   const [rules, setRules] = useState<AllRulesContent>(initialRules)
-  const [ruleType, setRuleType] = useState<ApplicationType>('server')
+  const [ruleType, setRuleType] = useState<ApplicationType>(editableTypes[0] ?? 'server')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     setRules(initialRules)
   }, [initialRules])
+
+  useEffect(() => {
+    if (!editableTypes.includes(ruleType)) {
+      setRuleType(editableTypes[0] ?? 'server')
+    }
+  }, [editableTypes, ruleType])
 
   const updateLocale = (locale: Language, field: keyof RulesLocaleContent, value: string) => {
     setRules((prev) => ({
@@ -136,7 +143,7 @@ export function RulesEditor({ initialRules, onSaved }: RulesEditorProps) {
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            {(['server', 'police', 'ems'] as const).map((type) => (
+            {editableTypes.map((type) => (
               <Button
                 key={type}
                 size="sm"

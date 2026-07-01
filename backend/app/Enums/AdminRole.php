@@ -35,7 +35,39 @@ enum AdminRole: string
 
     public function canManageRules(): bool
     {
-        return $this === self::SuperAdmin;
+        return $this->canManageAnyRules();
+    }
+
+    public function canManageAnyRules(): bool
+    {
+        return in_array($this, [self::SuperAdmin, self::PoliceAdmin, self::EmsAdmin], true);
+    }
+
+    public function canManageRulesForType(string $type): bool
+    {
+        return match ($this) {
+            self::SuperAdmin => true,
+            self::PoliceAdmin => $type === ApplicationType::Police->value,
+            self::EmsAdmin => $type === ApplicationType::Ems->value,
+            default => false,
+        };
+    }
+
+    public function canManageApplicationType(string $type): bool
+    {
+        return match ($this) {
+            self::SuperAdmin => true,
+            self::WhitelistAdmin => $type === ApplicationType::Server->value,
+            self::PoliceAdmin => $type === ApplicationType::Police->value,
+            self::EmsAdmin => $type === ApplicationType::Ems->value,
+            default => false,
+        };
+    }
+
+    public function canManageAnyApplicationTypes(): bool
+    {
+        return $this->canManageSettings()
+            || in_array($this, [self::WhitelistAdmin, self::PoliceAdmin, self::EmsAdmin], true);
     }
 
     public function canViewContacts(): bool

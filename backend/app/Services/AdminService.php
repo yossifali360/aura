@@ -156,16 +156,28 @@ class AdminService
 
     public function applicationTypes(User $actor): array
     {
-        $this->ensureSettingsAccess($this->requireRole($actor));
+        $this->ensureApplicationTypesAccess($this->requireRole($actor));
 
         return $this->settingRepository->getApplicationTypes();
     }
 
     public function updateApplicationTypes(UpdateApplicationTypesRequest $request, User $actor): array
     {
-        $this->ensureSettingsAccess($this->requireRole($actor));
+        $role = $this->requireRole($actor);
+        $this->ensureApplicationTypesAccess($role);
 
-        return $this->settingRepository->setApplicationTypes($request->validated());
+        $validated = $request->validated();
+        $current = $this->settingRepository->getApplicationTypes();
+
+        foreach (['server', 'police', 'ems'] as $type) {
+            if ($role->canManageApplicationType($type)) {
+                $current[$type] = $validated[$type];
+            } elseif (($validated[$type] ?? null) !== ($current[$type] ?? null)) {
+                throw new AuthorizationException(__('Forbidden.'));
+            }
+        }
+
+        return $this->settingRepository->setApplicationTypes($current);
     }
 
     public function rules(User $actor): array
@@ -177,9 +189,21 @@ class AdminService
 
     public function updateRules(UpdateRulesRequest $request, User $actor): array
     {
-        $this->ensureRulesAccess($this->requireRole($actor));
+        $role = $this->requireRole($actor);
+        $this->ensureRulesAccess($role);
 
-        return $this->settingRepository->setRules($request->validated());
+        $validated = $request->validated();
+        $current = $this->settingRepository->getRules();
+
+        foreach (['server', 'police', 'ems'] as $type) {
+            if ($role->canManageRulesForType($type)) {
+                $current[$type] = $validated[$type];
+            } elseif (($validated[$type] ?? null) !== ($current[$type] ?? null)) {
+                throw new AuthorizationException(__('Forbidden.'));
+            }
+        }
+
+        return $this->settingRepository->setRules($current);
     }
 
     public function sendApplicationMessages(SendApplicationMessageRequest $request, User $actor): array
@@ -254,9 +278,16 @@ class AdminService
         }
     }
 
+    private function ensureApplicationTypesAccess(AdminRole $role): void
+    {
+        if (! $role->canManageAnyApplicationTypes()) {
+            throw new AuthorizationException(__('Forbidden.'));
+        }
+    }
+
     private function ensureRulesAccess(AdminRole $role): void
     {
-        if (! $role->canManageRules()) {
+        if (! $role->canManageAnyRules()) {
             throw new AuthorizationException(__('Forbidden.'));
         }
     }

@@ -44,7 +44,10 @@ import type {
 } from '@/types'
 import {
   assignableAdminRoles,
+  canManageAnyApplicationTypes,
+  canManageApplicationType,
   canManageRules,
+  canManageRulesForType,
   canManageSettings,
   canManageUsers,
   canViewContacts,
@@ -114,7 +117,7 @@ export function AdminDashboardPage() {
     if (canManageUsers(user)) {
       tasks.push(fetchAdminUsers().then((data) => setUsers(data)))
     }
-    if (canManageSettings(user)) {
+    if (canManageAnyApplicationTypes(user)) {
       tasks.push(fetchAdminApplicationTypes().then((data) => setTypeSettings(data)))
     }
     if (canManageRules(user)) {
@@ -257,7 +260,7 @@ export function AdminDashboardPage() {
   const renderApplicationTab = (tabKey: 'whitelist' | 'police' | 'ems') => {
     const settingKey = TYPE_SETTING_KEY[tabKey]
     const isOpen = typeSettings?.[settingKey]
-    const showSettings = canManageSettings(user)
+    const showSettings = canManageApplicationType(user, TAB_TYPES[tabKey])
 
     return (
       <div className="space-y-4">
@@ -418,7 +421,11 @@ export function AdminDashboardPage() {
       ) : tab === 'ems' && canViewEmsTab(user) ? (
         renderApplicationTab('ems')
       ) : tab === 'rules' && rules && canManageRules(user) ? (
-        <RulesEditor initialRules={rules} onSaved={setRules} />
+        <RulesEditor
+          initialRules={rules}
+          onSaved={setRules}
+          editableTypes={(['server', 'police', 'ems'] as const).filter((type) => canManageRulesForType(user, type))}
+        />
       ) : tab === 'contacts' && canViewContacts(user) ? (
         <div className="space-y-4">
           {contacts.map((msg) => (
