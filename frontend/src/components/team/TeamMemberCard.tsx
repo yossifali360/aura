@@ -7,10 +7,9 @@ import { getDiscordAvatarUrl } from '@/utils/discordAvatar'
 
 interface TeamMemberCardProps {
   member: TeamMember
-  showCharacterName?: boolean
 }
 
-export function TeamMemberCard({ member, showCharacterName }: TeamMemberCardProps) {
+export function TeamMemberCard({ member }: TeamMemberCardProps) {
   const { t } = useTranslation()
   const [imageFailed, setImageFailed] = useState(false)
   const avatar = imageFailed
@@ -30,11 +29,6 @@ export function TeamMemberCard({ member, showCharacterName }: TeamMemberCardProp
         />
       </div>
       <h3 className="font-display text-lg font-bold">{member.name}</h3>
-      {showCharacterName && member.characterName && (
-        <p className="mt-1 text-sm text-aura-600 dark:text-aura-400">
-          {t('team.character_name')}: {member.characterName}
-        </p>
-      )}
       <Badge variant="success" className="mt-3">
         {role}
       </Badge>

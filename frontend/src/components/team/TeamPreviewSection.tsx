@@ -14,7 +14,6 @@ interface TeamPreviewSectionProps {
   subtitleKey: string
   meetTeamKey?: string
   icon?: LucideIcon
-  showCharacterName?: boolean
   maxPreview?: number
 }
 
@@ -25,7 +24,6 @@ export function TeamPreviewSection({
   subtitleKey,
   meetTeamKey = 'team.meet_team',
   icon: Icon,
-  showCharacterName = false,
   maxPreview = 4,
 }: TeamPreviewSectionProps) {
   const { t } = useTranslation()
@@ -56,7 +54,6 @@ export function TeamPreviewSection({
                   ...member,
                   avatarUrl: member.avatarUrl ?? avatars[member.discordId],
                 }}
-                showCharacterName={showCharacterName}
               />
             ))}
           </RevealOnScroll>

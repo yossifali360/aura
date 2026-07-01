@@ -5,11 +5,10 @@ import { useDiscordAvatars } from '@/hooks/useDiscordAvatars'
 
 interface TeamGridProps {
   members: TeamMember[]
-  showCharacterName?: boolean
   emptyMessage: string
 }
 
-export function TeamGrid({ members, showCharacterName, emptyMessage }: TeamGridProps) {
+export function TeamGrid({ members, emptyMessage }: TeamGridProps) {
   const avatars = useDiscordAvatars(members.map((member) => member.discordId))
 
   if (members.length === 0) {
@@ -27,7 +26,6 @@ export function TeamGrid({ members, showCharacterName, emptyMessage }: TeamGridP
             ...member,
             avatarUrl: member.avatarUrl ?? avatars[member.discordId],
           }}
-          showCharacterName={showCharacterName}
         />
       ))}
     </RevealOnScroll>
