@@ -287,7 +287,8 @@
   },
   "footer": {
     "tagline": "Aura Cfw — Where stories come alive.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "developed_by": "Developed by"
   },
   "auth": {
     "login_failed": "Discord login failed. Please try again.",
@@ -299,6 +300,61 @@
     "error": "Something went wrong. Please try again.",
     "applications_closed": "Applications are currently closed.",
     "applications_closed_desc": "Applications are not open right now. You can still read the rules above and check back later."
+  },
+  "team": {
+    "meet_team": "Meet Our Team",
+    "character_name": "Character",
+    "empty": "Team roster coming soon.",
+    "back_home": "Back to Home",
+    "admin": {
+      "title": "Server Team",
+      "subtitle": "The staff who run Aura Cfw — keeping the city fair, fun, and welcoming for everyone.",
+      "home_title": "Server Administration",
+      "home_subtitle": "Meet the admins who keep Aura Cfw running smoothly."
+    },
+    "police": {
+      "title": "Ministry of Interior — Police",
+      "subtitle": "Ministry leadership, executive ranks, and officers serving the city.",
+      "home_title": "Ministry of Interior Leadership",
+      "home_subtitle": "Meet the ministry leadership and police department officers.",
+      "groups": {
+        "ministry_leadership": "Ministry Leadership",
+        "executive_leadership": "Executive Leadership",
+        "officers": "Officers",
+        "secretaries": "Police Secretaries"
+      }
+    },
+    "ems": {
+      "title": "Medical Services",
+      "subtitle": "The medics who respond when every second counts.",
+      "home_title": "Aura Medical Services",
+      "home_subtitle": "Meet the EMS team saving lives across Los Santos."
+    },
+    "roles": {
+      "owner": "Owner",
+      "co_owner": "Co-Owner",
+      "admin": "Administrator",
+      "moderator": "Moderator",
+      "developer": "Developer",
+      "chief": "Chief of Police",
+      "assistant_chief": "Assistant Chief",
+      "captain": "Captain",
+      "lieutenant": "Lieutenant",
+      "sergeant": "Sergeant",
+      "officer": "Officer",
+      "interior_minister": "Minister of Interior",
+      "deputy_interior_minister": "Deputy Minister of Interior",
+      "first_assistant_interior_minister": "First Assistant Minister of Interior",
+      "colonel": "Colonel",
+      "lieutenant_colonel": "Lieutenant Colonel",
+      "major": "Major",
+      "police_secretary": "Police Secretary",
+      "director": "EMS Director",
+      "supervisor": "Supervisor",
+      "paramedic": "Paramedic",
+      "doctor": "Doctor",
+      "trainee": "Trainee"
+    }
   },
   "validation": {
     "age_required": "Age is required.",

@@ -41,6 +41,7 @@ const departments = [
     icon: Users,
     applyTo: '/apply',
     rulesTo: '/rules',
+    teamTo: null,
     color: 'from-aura-500/20 to-aura-400/20 text-aura-600 dark:text-aura-400',
   },
   {
@@ -48,6 +49,7 @@ const departments = [
     icon: Shield,
     applyTo: '/apply/police',
     rulesTo: '/rules/police',
+    teamTo: '/team/police',
     color: 'from-slate-500/20 to-aura-500/15 text-slate-600 dark:text-slate-300',
   },
   {
@@ -55,6 +57,7 @@ const departments = [
     icon: Ambulance,
     applyTo: '/apply/ems',
     rulesTo: '/rules/ems',
+    teamTo: '/team/ems',
     color: 'from-aura-600/20 to-aura-400/15 text-aura-700 dark:text-aura-300',
   },
 ] as const
@@ -186,7 +189,7 @@ export function HomePage() {
             </p>
           </div>
           <RevealOnScroll className="grid gap-6 lg:grid-cols-3">
-            {departments.map(({ key, icon: Icon, applyTo, rulesTo, color }) => (
+            {departments.map(({ key, icon: Icon, applyTo, rulesTo, teamTo, color }) => (
               <Card key={key} glow className="flex flex-col">
                 <div className={`mb-4 flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${color}`}>
                   <Icon className="size-6" />
@@ -208,6 +211,13 @@ export function HomePage() {
                       {t(`home.departments.${key}.rules`)}
                     </Button>
                   </Link>
+                  {teamTo && (
+                    <Link to={teamTo}>
+                      <Button variant="ghost" size="sm">
+                        {t('team.meet_team')}
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </Card>
             ))}

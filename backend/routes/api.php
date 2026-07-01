@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DiscordController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,4 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 Route::get('/settings/application-types', [SettingsController::class, 'applicationTypes']);
 Route::get('/settings/rules', [SettingsController::class, 'rules']);
 Route::get('/settings/rules/{type}', [SettingsController::class, 'rulesByType']);
+Route::get('/discord/avatars', [DiscordController::class, 'avatars']);

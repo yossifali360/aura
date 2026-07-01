@@ -326,6 +326,79 @@ class DiscordBotService
         }
     }
 
+    /**
+     * @param  list<string>  $discordUserIds
+     * @return array<string, string>
+     */
+    public function getAvatarUrlsForUsers(array $discordUserIds): array
+    {
+        $urls = [];
+
+        foreach (array_unique($discordUserIds) as $discordUserId) {
+            if (! is_string($discordUserId) || ! preg_match('/^\d{17,20}$/', $discordUserId)) {
+                continue;
+            }
+
+            $urls[$discordUserId] = $this->resolveAvatarUrlForUser($discordUserId);
+        }
+
+        return $urls;
+    }
+
+    public function resolveAvatarUrlForUser(string $discordUserId): string
+    {
+        $token = $this->botToken();
+
+        if (! $token) {
+            return $this->defaultEmbedAvatarUrl($discordUserId);
+        }
+
+        try {
+            $response = Http::timeout(5)
+                ->withHeaders($this->headers())
+                ->get(self::API_BASE."/users/{$discordUserId}");
+
+            if (! $response->successful()) {
+                Log::debug('Discord user lookup failed for avatar', [
+                    'discord_id' => $discordUserId,
+                    'status' => $response->status(),
+                ]);
+
+                return $this->defaultEmbedAvatarUrl($discordUserId);
+            }
+
+            /** @var array<string, mixed> $data */
+            $data = $response->json();
+            $avatarHash = isset($data['avatar']) ? (string) $data['avatar'] : '';
+
+            if ($avatarHash !== '') {
+                $extension = str_starts_with($avatarHash, 'a_') ? 'gif' : 'png';
+
+                return "https://cdn.discordapp.com/avatars/{$discordUserId}/{$avatarHash}.{$extension}?size=256";
+            }
+
+            $discriminator = isset($data['discriminator']) ? (string) $data['discriminator'] : '0';
+
+            return $this->defaultEmbedAvatarUrl($discordUserId, $discriminator);
+        } catch (\Throwable $e) {
+            Log::debug('Discord user lookup exception for avatar', [
+                'discord_id' => $discordUserId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->defaultEmbedAvatarUrl($discordUserId);
+        }
+    }
+
+    private function defaultEmbedAvatarUrl(string $discordUserId, string $discriminator = '0'): string
+    {
+        $index = $discriminator === '0'
+            ? (int) bcmod(bcdiv($discordUserId, '4194304'), '6')
+            : ((int) $discriminator % 5);
+
+        return "https://cdn.discordapp.com/embed/avatars/{$index}.png?size=256";
+    }
+
     private function botToken(): ?string
     {
         $token = config('services.discord.bot_token');

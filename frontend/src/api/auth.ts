@@ -1,9 +1,8 @@
 import axiosInstance from '@/config/axios'
+import { API_BASE_URL } from '@/config/api'
 import type { ApiResponse, User } from '@/types'
 
-const API_BASE = import.meta.env.VITE_API_URL?.replace('/api', '') ?? 'https://aura.youssef-ali.com'
-
-export const getDiscordLoginUrl = (): string => `${API_BASE}/api/auth/discord/redirect`
+export const getDiscordLoginUrl = (): string => `${API_BASE_URL}/api/auth/discord/redirect`
 
 export async function fetchCurrentUser(): Promise<User> {
   const { data } = await axiosInstance.get<ApiResponse<User>>('/user')

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/store/authStore'
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'https://aura.youssef-ali.com/api'
+import { API_URL } from '@/config/api'
 
 export const axiosInstance = axios.create({
   baseURL: API_URL,

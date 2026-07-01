@@ -287,7 +287,8 @@
   },
   "footer": {
     "tagline": "Aura Cfw — حيث تنبض القصص بالحياة.",
-    "rights": "جميع الحقوق محفوظة."
+    "rights": "جميع الحقوق محفوظة.",
+    "developed_by": "طوّر بواسطة"
   },
   "auth": {
     "login_failed": "فشل تسجيل الدخول عبر ديسكورد. يرجى المحاولة مجدداً.",
@@ -299,6 +300,61 @@
     "error": "حدث خطأ. يرجى المحاولة مجدداً.",
     "applications_closed": "الطلبات مغلقة حالياً.",
     "applications_closed_desc": "التقديم غير متاح الآن. يمكنك قراءة القوانين أعلاه والمحاولة لاحقاً."
+  },
+  "team": {
+    "meet_team": "تعرّف على فريقنا",
+    "character_name": "الشخصية",
+    "empty": "قائمة الفريق قريباً.",
+    "back_home": "العودة للرئيسية",
+    "admin": {
+      "title": "طاقم السيرفر",
+      "subtitle": "الطاقم الذي يدير Aura Cfw — يحافظ على عدالة المدينة ومتعتها وترحيبها بالجميع.",
+      "home_title": "إدارة السيرفر",
+      "home_subtitle": "تعرّف على المشرفين الذين يديرون Aura Cfw."
+    },
+    "police": {
+      "title": "وزارة الداخلية — الشرطة",
+      "subtitle": "قيادات الوزارة والرتب التنفيذية وضباط الشرطة الذين يخدمون المدينة.",
+      "home_title": "قيادات وزارة الداخلية",
+      "home_subtitle": "تعرّف على قيادات الوزارة والضباط في قسم الشرطة.",
+      "groups": {
+        "ministry_leadership": "قيادات الوزارة",
+        "executive_leadership": "القيادات التنفيذية",
+        "officers": "الضباط",
+        "secretaries": "الأمناء"
+      }
+    },
+    "ems": {
+      "title": "الخدمات الطبية",
+      "subtitle": "المسعفون الذين يستجيبون عندما تكون كل ثانية حاسمة.",
+      "home_title": "خدمات Aura الطبية",
+      "home_subtitle": "تعرّف على فريق الإسعاف الذي ينقذ الأرواح في لوس سانتوس."
+    },
+    "roles": {
+      "owner": "المالك",
+      "co_owner": "المالك المشارك",
+      "admin": "مشرف",
+      "moderator": "مشرف فرعي",
+      "developer": "مطوّر",
+      "chief": "رئيس الشرطة",
+      "assistant_chief": "نائب رئيس الشرطة",
+      "captain": "نقيب",
+      "lieutenant": "ملازم",
+      "sergeant": "رقيب",
+      "officer": "ضابط",
+      "interior_minister": "وزير الداخلية",
+      "deputy_interior_minister": "نائب وزير الداخلية",
+      "first_assistant_interior_minister": "مساعد أول وزير الداخلية",
+      "colonel": "عقيد",
+      "lieutenant_colonel": "مقدم",
+      "major": "رائد",
+      "police_secretary": "أمين شرطة",
+      "director": "مدير الإسعاف",
+      "supervisor": "مشرف",
+      "paramedic": "مسعف",
+      "doctor": "طبيب",
+      "trainee": "متدرب"
+    }
   },
   "validation": {
     "age_required": "العمر مطلوب.",
