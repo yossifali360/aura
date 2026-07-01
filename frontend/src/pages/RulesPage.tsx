@@ -1,21 +1,18 @@
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { BookOpen } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
 import { RulesMarkdown } from '@/components/rules/RulesMarkdown'
 import { useRulesStore } from '@/store/rulesStore'
-import type { ApplicationType, Language } from '@/types'
+import type { ApplicationType } from '@/types'
 
 interface RulesPageProps {
   type?: ApplicationType
 }
 
 export function RulesPage({ type = 'server' }: RulesPageProps) {
-  const { i18n } = useTranslation()
   const { isLoading, load, getForType } = useRulesStore()
-  const locale = (i18n.language === 'ar' ? 'ar' : 'en') as Language
-  const content = getForType(type, locale)
+  const content = getForType(type, 'ar')
 
   useEffect(() => {
     load()

@@ -61,6 +61,11 @@ export function canManageUsers(user: User | null | undefined): boolean {
   return role === 'super_admin' || role === 'users_admin'
 }
 
+export function canManagePoliceRoster(user: User | null | undefined): boolean {
+  const role = getEffectiveAdminRole(user)
+  return role === 'super_admin' || role === 'police_admin'
+}
+
 export function canManageSettings(user: User | null | undefined): boolean {
   return getEffectiveAdminRole(user) === 'super_admin'
 }

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Ambulance,
   BookOpen,
+  ClipboardList,
   LayoutDashboard,
   Settings,
   Shield,
@@ -17,6 +18,7 @@ import { Select } from '@/components/ui/Select'
 import { ApplicationsTable } from '@/components/admin/ApplicationsTable'
 import { ApplicationDetailModal } from '@/components/admin/ApplicationDetailModal'
 import { RulesEditor } from '@/components/admin/RulesEditor'
+import { PoliceRosterEditor } from '@/components/admin/PoliceRosterEditor'
 import { SendDiscordMessageModal } from '@/components/admin/SendDiscordMessageModal'
 import { useAuthStore } from '@/store/authStore'
 import { useApplicationSettingsStore } from '@/store/applicationSettingsStore'
@@ -48,6 +50,7 @@ import {
   assignableAdminRoles,
   canManageAnyApplicationTypes,
   canManageApplicationType,
+  canManagePoliceRoster,
   canManageRules,
   canManageRulesForType,
   canManageSettings,
@@ -59,7 +62,7 @@ import {
   getDefaultAdminTab,
 } from '@/utils/adminPermissions'
 
-type Tab = 'whitelist' | 'police' | 'ems' | 'contacts' | 'users' | 'settings' | 'rules'
+type Tab = 'whitelist' | 'police' | 'ems' | 'roster' | 'contacts' | 'users' | 'settings' | 'rules'
 
 const TAB_TYPES: Record<'whitelist' | 'police' | 'ems', ApplicationType> = {
   whitelist: 'server',
@@ -468,6 +471,12 @@ export function AdminDashboardPage() {
             {t('admin.tabs.ems')}
           </Button>
         )}
+        {canManagePoliceRoster(user) && (
+          <Button variant={tab === 'roster' ? 'primary' : 'secondary'} size="sm" onClick={() => setTab('roster')}>
+            <ClipboardList className="size-4" />
+            {t('admin.tabs.roster')}
+          </Button>
+        )}
         {canManageRules(user) && (
           <Button variant={tab === 'rules' ? 'primary' : 'secondary'} size="sm" onClick={() => setTab('rules')}>
             <BookOpen className="size-4" />
@@ -504,6 +513,8 @@ export function AdminDashboardPage() {
         renderApplicationTab('police')
       ) : tab === 'ems' && canViewEmsTab(user) ? (
         renderApplicationTab('ems')
+      ) : tab === 'roster' && canManagePoliceRoster(user) ? (
+        <PoliceRosterEditor />
       ) : tab === 'rules' && canManageRules(user) ? (
         rulesLoading ? (
           <div className="flex min-h-[30vh] items-center justify-center">

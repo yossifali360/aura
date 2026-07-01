@@ -5,11 +5,11 @@ import { useGSAP } from '@gsap/react'
 import { ChevronDown, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
-import { LangToggle } from '@/components/layout/LangToggle'
 import { useAuthStore } from '@/store/authStore'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { cn } from '@/utils/cn'
 import { gsap } from '@/lib/gsap'
+import { usePoliceProfile } from '@/hooks/usePoliceProfile'
 
 const navItemBase =
   'inline-flex items-center gap-1 rounded-lg px-3 cursor-pointer py-2 text-sm font-medium leading-none transition whitespace-nowrap'
@@ -39,14 +39,15 @@ const navDropdownItemClass = ({ isActive }: { isActive: boolean }) =>
   )
 
 export function Navbar() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { user, logout } = useAuthStore()
+  const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
   const headerRef = useRef<HTMLElement>(null)
   const applyRef = useRef<HTMLDivElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [applyOpen, setApplyOpen] = useState(false)
-  const isRtl = i18n.language === 'ar'
+  const isRtl = true
 
   const applyLinks = [
     { to: '/apply', label: t('nav.apply') },
@@ -69,7 +70,7 @@ export function Navbar() {
   useEffect(() => {
     setMobileOpen(false)
     setApplyOpen(false)
-  }, [i18n.language])
+  }, [location.pathname])
 
   useEffect(() => {
     if (!applyOpen) return
@@ -148,6 +149,11 @@ export function Navbar() {
           <NavLink to="/rules" className={navLinkClass}>
             <span className="nav-item">{t('nav.rules')}</span>
           </NavLink>
+          {hasPoliceProfile && (
+            <NavLink to="/police/profile" className={navLinkClass}>
+              <span className="nav-item">{t('nav.police_profile')}</span>
+            </NavLink>
+          )}
           {user?.is_admin && (
             <NavLink to="/admin" className={navLinkClass}>
               <span className="nav-item">{t('nav.admin')}</span>
@@ -156,7 +162,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
-          <LangToggle className="hidden sm:flex" />
           <ThemeToggle />
 
           {user ? (
@@ -219,6 +224,11 @@ export function Navbar() {
             <NavLink to="/rules" className={navLinkClass} onClick={() => setMobileOpen(false)}>
               {t('nav.rules')}
             </NavLink>
+            {hasPoliceProfile && (
+              <NavLink to="/police/profile" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+                {t('nav.police_profile')}
+              </NavLink>
+            )}
             {user?.is_admin && (
               <NavLink to="/admin" className={navLinkClass} onClick={() => setMobileOpen(false)}>
                 {t('nav.admin')}
@@ -227,7 +237,6 @@ export function Navbar() {
           </nav>
 
           <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800 sm:hidden">
-            <LangToggle />
             {user ? (
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
