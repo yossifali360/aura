@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -20,7 +20,7 @@ import { ApplicationDetailModal } from '@/components/admin/ApplicationDetailModa
 import { RulesEditor } from '@/components/admin/RulesEditor'
 import { PoliceRosterEditor } from '@/components/admin/PoliceRosterEditor'
 import { SendDiscordMessageModal } from '@/components/admin/SendDiscordMessageModal'
-import { useAuthStore } from '@/store/authStore'
+import { useAuthStore, isAuthPending } from '@/store/authStore'
 import { useAuthHydrated } from '@/hooks/useAuthHydrated'
 import { useApplicationSettingsStore } from '@/store/applicationSettingsStore'
 import { useRulesStore } from '@/store/rulesStore'
@@ -80,8 +80,10 @@ const TYPE_SETTING_KEY: Record<'whitelist' | 'police' | 'ems', keyof Application
 export function AdminDashboardPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { user, isLoading } = useAuthStore()
+  const { user, token, isLoading } = useAuthStore()
   const hydrated = useAuthHydrated()
+  const authPending = isAuthPending({ hasHydrated: hydrated, token, user, isLoading })
+  const didInitRef = useRef(false)
   const refreshPublicSettings = useApplicationSettingsStore((s) => s.refresh)
   const [tab, setTab] = useState<Tab>('whitelist')
   const [stats, setStats] = useState<AdminStats | null>(null)
@@ -95,7 +97,7 @@ export function AdminDashboardPage() {
   const [rulesLoading, setRulesLoading] = useState(false)
   const [rulesError, setRulesError] = useState(false)
   const [filterStatus, setFilterStatus] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [tabLoading, setTabLoading] = useState(false)
   const [updatingId, setUpdatingId] = useState<number | null>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
@@ -191,12 +193,15 @@ export function AdminDashboardPage() {
   }, [user, typeSettings])
 
   useEffect(() => {
-    if (!hydrated || isLoading) return
+    if (authPending) return
 
     if (!user?.is_admin) {
       navigate('/', { replace: true })
       return
     }
+
+    if (didInitRef.current) return
+    didInitRef.current = true
 
     const defaultTab = getDefaultAdminTab(user)
     setTab(defaultTab)
@@ -208,7 +213,7 @@ export function AdminDashboardPage() {
         }
       })
       .finally(() => setLoading(false))
-  }, [hydrated, isLoading, user, navigate, loadCoreData, loadApplications])
+  }, [authPending, user, navigate, loadCoreData, loadApplications])
 
   useEffect(() => {
     if (!user?.is_admin || loading || !isApplicationTab || !applicationType) return
@@ -332,7 +337,7 @@ export function AdminDashboardPage() {
     }
   }
 
-  if (!hydrated || isLoading) {
+  if (authPending) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
         <span className="size-8 animate-spin rounded-full border-2 border-aura-500 border-t-transparent" />

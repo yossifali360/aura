@@ -5,8 +5,7 @@ import { useGSAP } from '@gsap/react'
 import { ChevronDown, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
-import { useAuthStore } from '@/store/authStore'
-import { useAuthHydrated } from '@/hooks/useAuthHydrated'
+import { useAuthStore, isAuthPending } from '@/store/authStore'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { cn } from '@/utils/cn'
 import { gsap } from '@/lib/gsap'
@@ -41,9 +40,9 @@ const navDropdownItemClass = ({ isActive }: { isActive: boolean }) =>
 
 export function Navbar() {
   const { t } = useTranslation()
-  const hydrated = useAuthHydrated()
+  const hasHydrated = useAuthStore((s) => s.hasHydrated)
   const { user, token, isLoading, logout } = useAuthStore()
-  const authPending = !hydrated || (Boolean(token) && isLoading && !user)
+  const authPending = isAuthPending({ hasHydrated, token, user, isLoading })
   const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
   const headerRef = useRef<HTMLElement>(null)

@@ -9,6 +9,20 @@ import { AppLoader } from '@/components/animation/AppLoader'
 import App from './App'
 import './index.css'
 
+function Root() {
+  const [ready, setReady] = useState(false)
+
+  if (!ready) {
+    return <AppLoader onComplete={() => setReady(true)} />
+  }
+
+  return (
+    <StrictMode>
+      <AppBootstrap />
+    </StrictMode>
+  )
+}
+
 function AppBootstrap() {
   const fetchUser = useAuthStore((s) => s.fetchUser)
   const loadApplicationSettings = useApplicationSettingsStore((s) => s.load)
@@ -27,20 +41,6 @@ function AppBootstrap() {
   }, [fetchUser, loadApplicationSettings, loadRules])
 
   return <App />
-}
-
-function Root() {
-  const [ready, setReady] = useState(false)
-
-  if (!ready) {
-    return <AppLoader onComplete={() => setReady(true)} />
-  }
-
-  return (
-    <StrictMode>
-      <AppBootstrap />
-    </StrictMode>
-  )
 }
 
 createRoot(document.getElementById('root')!).render(<Root />)
