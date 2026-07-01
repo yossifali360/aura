@@ -390,19 +390,6 @@ export function AdminDashboardPage() {
           </Card>
         )}
 
-        <Card className="p-4">
-          <Select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="w-auto min-w-[12rem]"
-          >
-            <option value="">{t('admin.filters.all_statuses')}</option>
-            <option value="pending">{t('apply.status_pending')}</option>
-            <option value="approved">{t('apply.status_approved')}</option>
-            <option value="rejected">{t('apply.status_rejected')}</option>
-          </Select>
-        </Card>
-
         {messageFeedback && (
           <p className={`text-sm ${messageFeedbackIsError ? 'text-red-500' : 'text-emerald-500'}`}>{messageFeedback}</p>
         )}
@@ -426,6 +413,18 @@ export function AdminDashboardPage() {
             deletingId={deletingId}
             emptyMessage={t('admin.empty')}
             onPreview={tabKey === 'police' ? setDetailApplication : undefined}
+            toolbar={
+              <Select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-auto min-w-[12rem]"
+              >
+                <option value="">{t('admin.filters.all_statuses')}</option>
+                <option value="pending">{t('apply.status_pending')}</option>
+                <option value="approved">{t('apply.status_approved')}</option>
+                <option value="rejected">{t('apply.status_rejected')}</option>
+              </Select>
+            }
           />
         )}
       </div>

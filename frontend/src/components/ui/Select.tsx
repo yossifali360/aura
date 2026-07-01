@@ -2,15 +2,19 @@ import {
   Children,
   forwardRef,
   isValidElement,
+  useCallback,
   useEffect,
+  useLayoutEffect,
   useId,
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactElement,
   type ReactNode,
   type SelectHTMLAttributes,
 } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
@@ -73,19 +77,69 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
     const id = idProp ?? generatedId
     const listboxId = `${id}-listbox`
     const containerRef = useRef<HTMLDivElement>(null)
+    const triggerRef = useRef<HTMLButtonElement>(null)
+    const menuRef = useRef<HTMLUListElement>(null)
     const [open, setOpen] = useState(false)
+    const [menuStyle, setMenuStyle] = useState<CSSProperties>({})
 
     const options = useMemo(() => parseOptions(children), [children])
     const selected = options.find((option) => option.value === String(value))
+
+    const setButtonRef = useCallback(
+      (node: HTMLButtonElement | null) => {
+        triggerRef.current = node
+        if (typeof ref === 'function') ref(node)
+        else if (ref) ref.current = node
+      },
+      [ref],
+    )
+
+    const updateMenuPosition = useCallback(() => {
+      const trigger = triggerRef.current
+      if (!trigger) return
+
+      const rect = trigger.getBoundingClientRect()
+      const menuHeight = menuRef.current?.offsetHeight ?? 240
+      const spaceBelow = window.innerHeight - rect.bottom
+      const openUpward = spaceBelow < menuHeight && rect.top > menuHeight
+
+      setMenuStyle({
+        position: 'fixed',
+        left: rect.left,
+        width: rect.width,
+        top: openUpward ? rect.top - 4 : rect.bottom + 4,
+        transform: openUpward ? 'translateY(-100%)' : undefined,
+        zIndex: 9999,
+      })
+    }, [])
+
+    useEffect(() => {
+      if (!open) return
+
+      updateMenuPosition()
+      window.addEventListener('scroll', updateMenuPosition, true)
+      window.addEventListener('resize', updateMenuPosition)
+
+      return () => {
+        window.removeEventListener('scroll', updateMenuPosition, true)
+        window.removeEventListener('resize', updateMenuPosition)
+      }
+    }, [open, updateMenuPosition])
+
+    useLayoutEffect(() => {
+      if (!open) return
+      updateMenuPosition()
+    }, [open, options, updateMenuPosition])
 
     useEffect(() => {
       if (!open) return
 
       const onPointerDown = (event: MouseEvent) => {
-        if (!containerRef.current?.contains(event.target as Node)) {
-          setOpen(false)
-          onBlur?.({ target: { name, value: String(value) } } as React.FocusEvent<HTMLSelectElement>)
-        }
+        const target = event.target as Node
+        if (containerRef.current?.contains(target) || menuRef.current?.contains(target)) return
+
+        setOpen(false)
+        onBlur?.({ target: { name, value: String(value) } } as React.FocusEvent<HTMLSelectElement>)
       }
 
       const onKeyDown = (event: KeyboardEvent) => {
@@ -106,6 +160,42 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
       setOpen(false)
     }
 
+    const menu = open ? (
+      <ul
+        ref={menuRef}
+        id={listboxId}
+        role="listbox"
+        aria-labelledby={id}
+        style={menuStyle}
+        className="max-h-60 overflow-y-auto rounded-xl border border-slate-200/80 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900"
+      >
+        {options.map((option) => {
+          const isSelected = option.value === String(value)
+
+          return (
+            <li key={`${option.value}-${String(option.label)}`} role="presentation">
+              <button
+                type="button"
+                role="option"
+                aria-selected={isSelected}
+                disabled={option.disabled}
+                onClick={() => selectValue(option.value)}
+                className={cn(
+                  'flex w-full px-4 py-2.5 text-start text-sm transition',
+                  isSelected
+                    ? 'bg-aura-500/10 font-medium text-aura-600 dark:text-aura-400'
+                    : 'text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800',
+                  option.disabled && 'cursor-not-allowed opacity-50',
+                )}
+              >
+                {option.label}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    ) : null
+
     return (
       <div className={label || error ? 'space-y-1.5' : undefined} ref={containerRef}>
         {label && (
@@ -116,7 +206,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
 
         <div className="group relative">
           <button
-            ref={ref}
+            ref={setButtonRef}
             id={id}
             type="button"
             disabled={disabled}
@@ -149,41 +239,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(
             />
           </button>
 
-          {open && (
-            <ul
-              id={listboxId}
-              role="listbox"
-              aria-labelledby={id}
-              className={cn(
-                'absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-slate-200/80 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900',
-              )}
-            >
-              {options.map((option) => {
-                const isSelected = option.value === String(value)
-
-                return (
-                  <li key={`${option.value}-${String(option.label)}`} role="presentation">
-                    <button
-                      type="button"
-                      role="option"
-                      aria-selected={isSelected}
-                      disabled={option.disabled}
-                      onClick={() => selectValue(option.value)}
-                      className={cn(
-                        'flex w-full px-4 py-2.5 text-start text-sm transition',
-                        isSelected
-                          ? 'bg-aura-500/10 font-medium text-aura-600 dark:text-aura-400'
-                          : 'text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-800',
-                        option.disabled && 'cursor-not-allowed opacity-50',
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
+          {menu && createPortal(menu, document.body)}
         </div>
 
         {error && <p className="text-sm text-red-500">{error}</p>}

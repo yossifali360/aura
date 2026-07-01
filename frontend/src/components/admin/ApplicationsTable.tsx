@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, Eye, MessageSquare, Trash2, X } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
@@ -19,6 +20,7 @@ interface ApplicationsTableProps {
   deletingId: number | null
   emptyMessage: string
   onPreview?: (app: Application) => void
+  toolbar?: ReactNode
 }
 
 export function ApplicationsTable({
@@ -35,12 +37,16 @@ export function ApplicationsTable({
   deletingId,
   emptyMessage,
   onPreview,
+  toolbar,
 }: ApplicationsTableProps) {
   const { t } = useTranslation()
   const allSelected = applications.length > 0 && selectedIds.length === applications.length
 
   return (
     <Card glow className="overflow-hidden p-0">
+      {toolbar && (
+        <div className="border-b border-slate-200 px-4 py-3 dark:border-slate-700">{toolbar}</div>
+      )}
       {selectedIds.length > 0 && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 dark:border-slate-700">
           <p className="text-sm text-slate-500">
