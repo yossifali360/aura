@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { TeamGrid } from '@/components/team/TeamGrid'
-import type { PoliceTeamGroup } from '@/data/team'
+import type { PoliceDisplayGroup } from '@/utils/policeRoster'
 
 interface PoliceTeamGroupsProps {
-  groups: PoliceTeamGroup[]
+  groups: PoliceDisplayGroup[]
   emptyMessage: string
 }
 

@@ -10,7 +10,8 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu",
     "login": "Login with Discord",
-    "logout": "Logout"
+    "logout": "Logout",
+    "police_profile": "My Police Record"
   },
   "hero": {
     "badge": "FiveM Community",
@@ -171,7 +172,8 @@
       "rules": "Rules",
       "contacts": "Contact Messages",
       "users": "Users",
-      "settings": "Application Settings"
+      "settings": "Application Settings",
+      "roster": "Police Roster"
     },
     "stats": {
       "pending": "Pending",
@@ -255,6 +257,98 @@
       "select_user": "Select {{name}}",
       "selected": "{{count}} selected",
       "result": "Sent {{sent}} message(s). {{failed}} failed."
+    },
+    "roster": {
+      "title": "Police Roster",
+      "subtitle": "Add, edit, or remove police members. Linked Discord IDs let officers view their record after login.",
+      "add_title": "Add Police Member",
+      "edit_title": "Edit Police Member",
+      "add": "Add Member",
+      "save": "Save Changes",
+      "empty": "No roster members yet.",
+      "delete_confirm": "Remove {{name}} from the police roster?",
+      "badge_number": "Badge #",
+      "name": "Name",
+      "shoulder_rank": "Shoulder Rank",
+      "rank": "Rank",
+      "section": "Section",
+      "status": "Status",
+      "position": "Position",
+      "discord_username": "Discord Username",
+      "discord_id": "Discord ID",
+      "points": "Points",
+      "points_exempt": "Exempt from points",
+      "warnings": "Warnings",
+      "joined_at": "Join Date",
+      "last_promotion": "Last Promotion",
+      "specialties": "Specialties"
+    }
+  },
+  "police": {
+    "ranks": {
+      "interior_minister": "Interior Minister",
+      "deputy_interior_minister": "Deputy Interior Minister",
+      "first_assistant_interior_minister": "First Assistant Interior Minister",
+      "general": "General",
+      "brigadier": "Brigadier",
+      "colonel": "Colonel",
+      "lieutenant_colonel": "Lieutenant Colonel",
+      "major": "Major",
+      "captain": "Captain",
+      "first_lieutenant": "First Lieutenant",
+      "lieutenant": "Lieutenant",
+      "police_secretary": "Police Secretary",
+      "first_sergeant": "First Sergeant",
+      "sergeant": "Sergeant",
+      "first_corporal": "First Corporal",
+      "corporal": "Corporal",
+      "first_soldier": "First Soldier",
+      "soldier": "Soldier",
+      "trainee": "Trainee"
+    },
+    "sections": {
+      "ministry_leadership": "Ministry Leadership",
+      "executive_leadership": "Executive Leadership",
+      "officers": "Officers",
+      "secretaries": "Secretaries",
+      "sergeants": "Sergeants",
+      "corporals": "Corporals",
+      "soldiers": "Soldiers",
+      "academy": "Academy"
+    },
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "leave": "On Leave"
+    },
+    "specialty_statuses": {
+      "none": "None",
+      "certified": "Certified",
+      "training": "In Training"
+    },
+    "specialties": {
+      "specialty_speed": "Speed",
+      "specialty_motor": "Motor",
+      "specialty_air": "Air",
+      "specialty_offroad": "Offroad",
+      "specialty_operations": "Operations",
+      "specialty_negotiation": "Negotiation",
+      "specialty_national_security": "National Security"
+    },
+    "roster": {
+      "load_fallback": "Could not load live roster. Showing cached data."
+    },
+    "profile": {
+      "login_title": "Police Member Login",
+      "login_desc": "Sign in with Discord to view your police roster record.",
+      "not_found_title": "No Roster Record",
+      "not_found_desc": "Your Discord account is not linked to a police roster entry. Contact leadership if this is a mistake.",
+      "badge": "Badge #{{number}}",
+      "details": "Service Details",
+      "record": "Record & Dates",
+      "exempt": "Exempt",
+      "back_team": "Back to Police Team"
     }
   },
   "rules": {
@@ -321,7 +415,11 @@
         "ministry_leadership": "Ministry Leadership",
         "executive_leadership": "Executive Leadership",
         "officers": "Officers",
-        "secretaries": "Police Secretaries"
+        "secretaries": "Police Secretaries",
+        "sergeants": "Sergeants",
+        "corporals": "Corporals",
+        "soldiers": "Soldiers",
+        "academy": "Academy"
       }
     },
     "ems": {

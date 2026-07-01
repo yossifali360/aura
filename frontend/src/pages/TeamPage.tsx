@@ -1,10 +1,14 @@
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Ambulance, ArrowLeft, Shield, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { TeamGrid } from '@/components/team/TeamGrid'
 import { PoliceTeamGroups } from '@/components/team/PoliceTeamGroups'
+import { fetchPublicPoliceRoster } from '@/api/police'
 import { getPoliceTeamGroups, getTeamMembers, type TeamSection } from '@/data/team'
+import { rosterGroupedToDisplayGroups } from '@/utils/policeRoster'
+import type { PoliceDisplayGroup } from '@/utils/policeRoster'
 
 const sectionMeta: Record<TeamSection, { icon: typeof Users; teamPath: string }> = {
   admin: { icon: Users, teamPath: '/team' },
@@ -20,7 +24,43 @@ export function TeamPage({ section }: TeamPageProps) {
   const { t } = useTranslation()
   const members = getTeamMembers(section)
   const { icon: Icon } = sectionMeta[section]
-  const policeGroups = section === 'police' ? getPoliceTeamGroups() : []
+  const [policeGroups, setPoliceGroups] = useState<PoliceDisplayGroup[]>([])
+  const [policeLoading, setPoliceLoading] = useState(section === 'police')
+  const [policeError, setPoliceError] = useState(false)
+
+  const staticPoliceGroups = useMemo(
+    () => (section === 'police' ? getPoliceTeamGroups() : []),
+    [section],
+  )
+
+  useEffect(() => {
+    if (section !== 'police') return
+
+    let active = true
+    setPoliceLoading(true)
+    setPoliceError(false)
+
+    fetchPublicPoliceRoster()
+      .then((roster) => {
+        if (!active) return
+        const groups = rosterGroupedToDisplayGroups(roster)
+        const hasMembers = groups.some((group) => group.members.length > 0)
+        setPoliceGroups(hasMembers ? groups : staticPoliceGroups)
+      })
+      .catch(() => {
+        if (active) {
+          setPoliceError(true)
+          setPoliceGroups(staticPoliceGroups)
+        }
+      })
+      .finally(() => {
+        if (active) setPoliceLoading(false)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [section, staticPoliceGroups])
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
@@ -37,7 +77,20 @@ export function TeamPage({ section }: TeamPageProps) {
       </div>
 
       {section === 'police' ? (
-        <PoliceTeamGroups groups={policeGroups} emptyMessage={t('team.empty')} />
+        policeLoading ? (
+          <div className="flex min-h-[20vh] items-center justify-center">
+            <span className="size-8 animate-spin rounded-full border-2 border-aura-500 border-t-transparent" />
+          </div>
+        ) : (
+          <>
+            {policeError && (
+              <p className="mb-6 text-center text-sm text-amber-600 dark:text-amber-400">
+                {t('police.roster.load_fallback')}
+              </p>
+            )}
+            <PoliceTeamGroups groups={policeGroups} emptyMessage={t('team.empty')} />
+          </>
+        )
       ) : (
         <TeamGrid
           members={members}

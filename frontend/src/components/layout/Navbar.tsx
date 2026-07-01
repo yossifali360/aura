@@ -10,6 +10,7 @@ import { useAuthStore } from '@/store/authStore'
 import { getDiscordLoginUrl } from '@/api/auth'
 import { cn } from '@/utils/cn'
 import { gsap } from '@/lib/gsap'
+import { usePoliceProfile } from '@/hooks/usePoliceProfile'
 
 const navItemBase =
   'inline-flex items-center gap-1 rounded-lg px-3 cursor-pointer py-2 text-sm font-medium leading-none transition whitespace-nowrap'
@@ -41,6 +42,7 @@ const navDropdownItemClass = ({ isActive }: { isActive: boolean }) =>
 export function Navbar() {
   const { t, i18n } = useTranslation()
   const { user, logout } = useAuthStore()
+  const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
   const headerRef = useRef<HTMLElement>(null)
   const applyRef = useRef<HTMLDivElement>(null)
@@ -148,6 +150,11 @@ export function Navbar() {
           <NavLink to="/rules" className={navLinkClass}>
             <span className="nav-item">{t('nav.rules')}</span>
           </NavLink>
+          {hasPoliceProfile && (
+            <NavLink to="/police/profile" className={navLinkClass}>
+              <span className="nav-item">{t('nav.police_profile')}</span>
+            </NavLink>
+          )}
           {user?.is_admin && (
             <NavLink to="/admin" className={navLinkClass}>
               <span className="nav-item">{t('nav.admin')}</span>
@@ -219,6 +226,11 @@ export function Navbar() {
             <NavLink to="/rules" className={navLinkClass} onClick={() => setMobileOpen(false)}>
               {t('nav.rules')}
             </NavLink>
+            {hasPoliceProfile && (
+              <NavLink to="/police/profile" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+                {t('nav.police_profile')}
+              </NavLink>
+            )}
             {user?.is_admin && (
               <NavLink to="/admin" className={navLinkClass} onClick={() => setMobileOpen(false)}>
                 {t('nav.admin')}

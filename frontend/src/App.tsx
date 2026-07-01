@@ -8,6 +8,7 @@ import { EmsApplyPage } from '@/pages/EmsApplyPage'
 import { RulesPage } from '@/pages/RulesPage'
 import { AuthCallbackPage } from '@/pages/AuthCallbackPage'
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage'
+import { PoliceProfilePage } from '@/pages/PoliceProfilePage'
 import { TeamPage } from '@/pages/TeamPage'
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/team" element={<TeamPage section="admin" />} />
           <Route path="/team/police" element={<TeamPage section="police" />} />
           <Route path="/team/ems" element={<TeamPage section="ems" />} />
+          <Route path="/police/profile" element={<PoliceProfilePage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
         </Route>
         <Route path="/auth/callback" element={<AuthCallbackPage />} />

@@ -10,7 +10,8 @@
     "open_menu": "فتح القائمة",
     "close_menu": "إغلاق القائمة",
     "login": "تسجيل الدخول عبر Discord",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "police_profile": "سجلي الشرطي"
   },
   "hero": {
     "badge": "لعب الأدوار FiveM",
@@ -171,7 +172,8 @@
       "rules": "القوانين",
       "contacts": "رسائل التواصل",
       "users": "المستخدمون",
-      "settings": "إعدادات الطلبات"
+      "settings": "إعدادات الطلبات",
+      "roster": "سجل الشرطة"
     },
     "stats": {
       "pending": "قيد الانتظار",
@@ -255,6 +257,98 @@
       "select_user": "تحديد {{name}}",
       "selected": "{{count}} محدد",
       "result": "تم إرسال {{sent}} رسالة. فشل {{failed}}."
+    },
+    "roster": {
+      "title": "سجل الشرطة",
+      "subtitle": "إضافة وتعديل وحذف أعضاء الشرطة. ربط معرف Discord يتيح للضابط عرض سجله بعد تسجيل الدخول.",
+      "add_title": "إضافة عضو شرطة",
+      "edit_title": "تعديل عضو شرطة",
+      "add": "إضافة عضو",
+      "save": "حفظ التغييرات",
+      "empty": "لا يوجد أعضاء في السجل بعد.",
+      "delete_confirm": "إزالة {{name}} من سجل الشرطة؟",
+      "badge_number": "رقم الشارة",
+      "name": "الاسم",
+      "shoulder_rank": "رتبة الكتف",
+      "rank": "الرتبة",
+      "section": "القسم",
+      "status": "الحالة",
+      "position": "المنصب",
+      "discord_username": "اسم Discord",
+      "discord_id": "معرف Discord",
+      "points": "النقاط",
+      "points_exempt": "معفى من النقاط",
+      "warnings": "الإنذارات",
+      "joined_at": "تاريخ الدخول",
+      "last_promotion": "آخر ترقية",
+      "specialties": "التخصصات"
+    }
+  },
+  "police": {
+    "ranks": {
+      "interior_minister": "وزير الداخلية",
+      "deputy_interior_minister": "نائب وزير الداخلية",
+      "first_assistant_interior_minister": "مساعد أول وزير الداخلية",
+      "general": "فريق",
+      "brigadier": "لواء",
+      "colonel": "عقيد",
+      "lieutenant_colonel": "مقدم",
+      "major": "رائد",
+      "captain": "نقيب",
+      "first_lieutenant": "ملازم أول",
+      "lieutenant": "ملازم",
+      "police_secretary": "أمين شرطة",
+      "first_sergeant": "رقيب أول",
+      "sergeant": "رقيب",
+      "first_corporal": "عريف أول",
+      "corporal": "عريف",
+      "first_soldier": "جندي أول",
+      "soldier": "جندي",
+      "trainee": "متدرب"
+    },
+    "sections": {
+      "ministry_leadership": "قيادات الوزارة",
+      "executive_leadership": "القيادات التنفيذية",
+      "officers": "الضباط",
+      "secretaries": "الأمناء",
+      "sergeants": "الرقباء",
+      "corporals": "العرفاء",
+      "soldiers": "الجنود",
+      "academy": "الأكاديمية"
+    },
+    "statuses": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "suspended": "موقوف",
+      "leave": "إجازة"
+    },
+    "specialty_statuses": {
+      "none": "لا يوجد",
+      "certified": "معتمد",
+      "training": "قيد التدريب"
+    },
+    "specialties": {
+      "specialty_speed": "سبيد",
+      "specialty_motor": "موتور",
+      "specialty_air": "جوي",
+      "specialty_offroad": "اوفرود",
+      "specialty_operations": "عمليات",
+      "specialty_negotiation": "تفاوض",
+      "specialty_national_security": "امن وطني"
+    },
+    "roster": {
+      "load_fallback": "تعذر تحميل السجل المباشر. يتم عرض البيانات المحفوظة."
+    },
+    "profile": {
+      "login_title": "تسجيل دخول الشرطة",
+      "login_desc": "سجّل الدخول عبر Discord لعرض سجلك في الشرطة.",
+      "not_found_title": "لا يوجد سجل",
+      "not_found_desc": "حساب Discord الخاص بك غير مرتبط بسجل الشرطة. تواصل مع القيادة إذا كان هذا خطأ.",
+      "badge": "شارة #{{number}}",
+      "details": "تفاصيل الخدمة",
+      "record": "السجل والتواريخ",
+      "exempt": "معفى",
+      "back_team": "العودة لفريق الشرطة"
     }
   },
   "rules": {
@@ -321,7 +415,11 @@
         "ministry_leadership": "قيادات الوزارة",
         "executive_leadership": "القيادات التنفيذية",
         "officers": "الضباط",
-        "secretaries": "الأمناء"
+        "secretaries": "الأمناء",
+        "sergeants": "الرقباء",
+        "corporals": "العرفاء",
+        "soldiers": "الجنود",
+        "academy": "الأكاديمية"
       }
     },
     "ems": {
