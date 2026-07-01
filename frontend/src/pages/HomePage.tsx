@@ -8,6 +8,7 @@ import {
   Briefcase,
   Calendar,
   CheckCircle2,
+  Crown,
   FileText,
   LogIn,
   MessageCircle,
@@ -17,7 +18,9 @@ import {
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
+import { TeamPreviewSection } from '@/components/team/TeamPreviewSection'
 import { StatCounter } from '@/components/animation/StatCounter'
+import { getTeamMembers } from '@/data/team'
 import { gsap } from '@/lib/gsap'
 
 const stats = [
@@ -224,6 +227,15 @@ export function HomePage() {
           </RevealOnScroll>
         </div>
       </section>
+
+      <TeamPreviewSection
+        members={getTeamMembers('admin')}
+        teamTo="/team"
+        titleKey="home.owners_title"
+        subtitleKey="home.owners_subtitle"
+        icon={Crown}
+        maxPreview={3}
+      />
 
       <section className="px-4 py-16">
         <div className="mx-auto max-w-4xl">

@@ -6,6 +6,8 @@ import { TeamMemberCard } from '@/components/team/TeamMemberCard'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
 import type { TeamMember } from '@/data/team'
 import { useDiscordAvatars } from '@/hooks/useDiscordAvatars'
+import { getTeamGridClass } from '@/utils/teamGrid'
+import { cn } from '@/utils/cn'
 
 interface TeamPreviewSectionProps {
   members: TeamMember[]
@@ -46,7 +48,7 @@ export function TeamPreviewSection({
         </div>
 
         {preview.length > 0 ? (
-          <RevealOnScroll className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <RevealOnScroll className={cn('grid gap-6', getTeamGridClass(preview.length))}>
             {preview.map((member) => (
               <TeamMemberCard
                 key={`${member.badgeNumber ?? member.discordId}-${member.roleKey}`}

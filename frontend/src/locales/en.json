@@ -77,6 +77,8 @@
         "rules": "EMS Rules"
       }
     },
+    "owners_title": "Owners",
+    "owners_subtitle": "The founders and leadership behind Aura Cfw — building the community and shaping the server vision.",
     "cta_title": "Ready to write your story?",
     "cta_subtitle": "Join hundreds of players in a living city built for serious, fun roleplay.",
     "cta_apply": "Start Your Application",
@@ -498,6 +500,9 @@
     },
     "roles": {
       "owner": "Owner",
+      "founder": "Founder",
+      "dev_director": "Dev Director + High Management",
+      "high_management": "High Management",
       "co_owner": "Co-Owner",
       "admin": "Administrator",
       "moderator": "Moderator",

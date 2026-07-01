@@ -18,15 +18,23 @@ export interface PoliceTeamGroup {
   members: TeamMember[]
 }
 
-// export const SERVER_ADMINS: TeamMember[] = [
-//   {
-//     discordId: '000000000000000001',
-//     name: 'Youssef',
-//     roleKey: 'owner',
-//   },
-// ]
-
-export const SERVER_ADMINS: TeamMember[] = []
+export const SERVER_ADMINS: TeamMember[] = [
+  {
+    discordId: '1153681674127806514',
+    name: 'ABNMASR',
+    roleKey: 'founder',
+  },
+  {
+    discordId: '853325320286765076',
+    name: 'EL DEEB',
+    roleKey: 'dev_director',
+  },
+  {
+    discordId: '845405845105541171',
+    name: 'Ra1zoo',
+    roleKey: 'high_management',
+  },
+]
 
 export const POLICE_TEAM_GROUPS: PoliceTeamGroup[] = [
   {

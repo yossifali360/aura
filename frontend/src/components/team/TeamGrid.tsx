@@ -2,6 +2,8 @@ import { TeamMemberCard } from '@/components/team/TeamMemberCard'
 import type { TeamMember } from '@/data/team'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
 import { useDiscordAvatars } from '@/hooks/useDiscordAvatars'
+import { getTeamGridClass } from '@/utils/teamGrid'
+import { cn } from '@/utils/cn'
 
 interface TeamGridProps {
   members: TeamMember[]
@@ -18,7 +20,7 @@ export function TeamGrid({ members, emptyMessage }: TeamGridProps) {
   }
 
   return (
-    <RevealOnScroll className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <RevealOnScroll className={cn('grid gap-6', getTeamGridClass(members.length))}>
       {members.map((member) => (
         <TeamMemberCard
           key={`${member.badgeNumber ?? member.discordId}-${member.roleKey}`}
