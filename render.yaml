@@ -54,6 +54,10 @@ services:
         sync: false
       - key: DISCORD_GUILD_ID
         sync: false
+      - key: DISCORD_TEAM_ROLE_IDS
+        sync: false
+      - key: DISCORD_OWNER_ROLE_ID
+        sync: false
       - key: ADMIN_DISCORD_IDS
         sync: false
       - key: SANCTUM_STATEFUL_DOMAINS

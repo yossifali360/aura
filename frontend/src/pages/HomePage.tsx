@@ -230,9 +230,10 @@ export function HomePage() {
 
       <TeamPreviewSection
         members={getTeamMembers('admin')}
-        teamTo="/team"
         titleKey="home.owners_title"
         subtitleKey="home.owners_subtitle"
+        actionTo="/team"
+        actionLabelKey="team.meet_team"
         icon={Crown}
         maxPreview={3}
       />

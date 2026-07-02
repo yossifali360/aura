@@ -24,6 +24,15 @@ return [
             'trim',
             explode(',', (string) env('ADMIN_DISCORD_IDS', '')),
         ))),
+        // Comma-separated Discord role IDs for /team page — order = display order on the page
+        'team_role_ids' => array_values(array_unique(array_filter(array_map(
+            'trim',
+            explode(',', (string) env('DISCORD_TEAM_ROLE_IDS', '')),
+        ), fn (string $id): bool => preg_match('/^\d{17,20}$/', $id) === 1))),
+        // Legacy single-role keys (optional per-page endpoints)
+        'public_roles' => array_filter([
+            'owners' => env('DISCORD_OWNER_ROLE_ID'),
+        ]),
     ],
 
 ];

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Ambulance, ArrowLeft, Shield, Users } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { TeamGrid } from '@/components/team/TeamGrid'
+import { DiscordTeamGrid } from '@/components/team/DiscordTeamGrid'
 import { PoliceTeamGroups } from '@/components/team/PoliceTeamGroups'
 import { getPoliceTeamGroups, getTeamMembers, type TeamSection } from '@/data/team'
 
@@ -40,7 +41,9 @@ export function TeamPage({ section }: TeamPageProps) {
         </p>
       </div>
 
-      {section === 'police' ? (
+      {section === 'admin' ? (
+        <DiscordTeamGrid />
+      ) : section === 'police' ? (
         <PoliceTeamGroups groups={policeGroups} emptyMessage={t('team.empty')} />
       ) : (
         <TeamGrid members={members} emptyMessage={t('team.empty')} />

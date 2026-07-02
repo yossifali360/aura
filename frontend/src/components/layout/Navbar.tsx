@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useGSAP } from '@gsap/react'
 import { ChevronDown, LogIn, LogOut, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { DiscordAvatar } from '@/components/ui/DiscordAvatar'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { useAuthStore, isAuthPending } from '@/store/authStore'
 import { getDiscordLoginUrl } from '@/api/auth'
@@ -174,8 +175,9 @@ export function Navbar() {
           ) : user ? (
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="hidden items-center gap-2 md:flex">
-                <img
+                <DiscordAvatar
                   src={user.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
+                  fallbackSrc={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
                   alt={user.first_name}
                   className="size-8 rounded-full ring-2 ring-aura-500/40 lg:size-9"
                 />
@@ -252,8 +254,9 @@ export function Navbar() {
             ) : user ? (
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <img
+                  <DiscordAvatar
                     src={user.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
+                    fallbackSrc={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
                     alt={user.first_name}
                     className="size-9 rounded-full ring-2 ring-aura-500/40"
                   />

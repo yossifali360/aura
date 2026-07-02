@@ -79,6 +79,7 @@
     },
     "owners_title": "Owners",
     "owners_subtitle": "The founders and leadership behind Aura Cfw — building the community and shaping the server vision.",
+    "owners_discord_role": "View all owners from Discord",
     "cta_title": "Ready to write your story?",
     "cta_subtitle": "Join hundreds of players in a living city built for serious, fun roleplay.",
     "cta_apply": "Start Your Application",
@@ -466,10 +467,16 @@
     "applications_closed_desc": "Applications are not open right now. You can still read the rules above and check back later."
   },
   "team": {
-    "meet_team": "Meet Our Team",
+    "meet_team": "View our team",
     "character_name": "Character",
     "empty": "Team roster coming soon.",
     "back_home": "Back to Home",
+    "discord_role": {
+      "owners_title": "Owners — Discord",
+      "owners_subtitle": "Everyone with the owners role on the Discord server.",
+      "error": "Could not load members from Discord. Check bot setup and Server Members Intent.",
+      "empty": "No members have this role right now."
+    },
     "admin": {
       "title": "Server Team",
       "subtitle": "The staff who run Aura Cfw — keeping the city fair, fun, and welcoming for everyone.",

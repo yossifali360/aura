@@ -47,5 +47,7 @@ Route::get('/settings/application-types', [SettingsController::class, 'applicati
 Route::get('/settings/rules', [SettingsController::class, 'rules']);
 Route::get('/settings/rules/{type}', [SettingsController::class, 'rulesByType']);
 Route::get('/discord/avatars', [DiscordController::class, 'avatars']);
+Route::get('/discord/team/members', [DiscordController::class, 'teamMembers']);
+Route::get('/discord/roles/{roleKey}/members', [DiscordController::class, 'roleMembers']);
 Route::get('/police/roster', [PoliceMemberController::class, 'roster']);
 Route::get('/police/options', [PoliceMemberController::class, 'options']);

@@ -1,7 +1,8 @@
 // import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { type LucideIcon } from 'lucide-react'
-// import { Button } from '@/components/ui/Button'
+import { ArrowRight, type LucideIcon } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 import { TeamMemberCard } from '@/components/team/TeamMemberCard'
 import { RevealOnScroll } from '@/components/animation/RevealOnScroll'
 import type { TeamMember } from '@/data/team'
@@ -11,20 +12,24 @@ import { cn } from '@/utils/cn'
 
 interface TeamPreviewSectionProps {
   members: TeamMember[]
-  teamTo: string
+  teamTo?: string
   titleKey: string
   subtitleKey: string
   meetTeamKey?: string
+  actionTo?: string
+  actionLabelKey?: string
   icon?: LucideIcon
   maxPreview?: number
 }
 
 export function TeamPreviewSection({
   members,
-  teamTo: _teamTo,
+  teamTo,
   titleKey,
   subtitleKey,
-  meetTeamKey: _meetTeamKey = 'team.meet_team',
+  meetTeamKey = 'team.meet_team',
+  actionTo,
+  actionLabelKey,
   icon: Icon,
   maxPreview = 4,
 }: TeamPreviewSectionProps) {
@@ -63,14 +68,27 @@ export function TeamPreviewSection({
           <p className="text-center text-slate-500">{t('team.empty')}</p>
         )}
 
-        {/* <div className="mt-10 text-center">
-          <Link to={teamTo}>
-            <Button size="lg">
-              {t(meetTeamKey)}
-              <ArrowRight className="size-5" />
-            </Button>
-          </Link>
-        </div> */}
+        {actionTo && actionLabelKey && (
+          <div className="mt-10 text-center">
+            <Link to={actionTo}>
+              <Button size="lg">
+                {t(actionLabelKey)}
+                <ArrowRight className="size-5" />
+              </Button>
+            </Link>
+          </div>
+        )}
+
+        {teamTo && !actionTo && (
+          <div className="mt-10 text-center">
+            <Link to={teamTo}>
+              <Button size="lg">
+                {t(meetTeamKey)}
+                <ArrowRight className="size-5" />
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Enums\ApplicationType;
 use App\Models\Application;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -345,6 +346,108 @@ class DiscordBotService
         return $urls;
     }
 
+    /**
+     * @param  list<string>  $roleIds
+     * @return array{members: list<array{discord_id: string, name: string, username: string, avatar: string, role: string, role_id: string}>}|null
+     */
+    public function getGuildTeamMembers(array $roleIds): ?array
+    {
+        $roleIds = array_values(array_filter($roleIds, fn (string $id): bool => preg_match('/^\d{17,20}$/', $id) === 1));
+
+        if ($roleIds === []) {
+            return null;
+        }
+
+        $guildId = config('services.discord.guild_id');
+
+        if (! is_string($guildId) || $guildId === '' || ! $this->botToken()) {
+            return null;
+        }
+
+        $cacheKey = 'discord.team_members.v3.'.$guildId.'.'.implode(',', $roleIds);
+
+        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($guildId, $roleIds): ?array {
+            $rolesIndex = $this->fetchGuildRolesIndex($guildId);
+
+            if ($rolesIndex === null) {
+                return null;
+            }
+
+            $groupedMembers = $this->fetchGuildMembersGroupedByRoles($guildId, $roleIds, $rolesIndex);
+
+            if ($groupedMembers === null) {
+                return null;
+            }
+
+            $members = [];
+
+            foreach ($roleIds as $roleId) {
+                if (! isset($rolesIndex[$roleId])) {
+                    continue;
+                }
+
+                $roleMembers = $groupedMembers[$roleId] ?? [];
+
+                usort($roleMembers, fn (array $a, array $b): int => strcasecmp($a['name'], $b['name']));
+
+                foreach ($roleMembers as $member) {
+                    $members[] = $member;
+                }
+            }
+
+            return ['members' => $members];
+        });
+    }
+
+    /**
+     * @return array{role: array{id: string, name: string, color: string|null}, members: list<array{discord_id: string, name: string, username: string, avatar: string}>}|null
+     */
+    public function getGuildMembersWithRole(string $roleId): ?array
+    {
+        $payload = $this->getGuildTeamMembers([$roleId]);
+
+        if ($payload === null || $payload['members'] === []) {
+            return null;
+        }
+
+        $guildId = config('services.discord.guild_id');
+        $rolesIndex = is_string($guildId) && $guildId !== ''
+            ? $this->fetchGuildRolesIndex($guildId)
+            : null;
+        $role = $rolesIndex[$roleId] ?? null;
+
+        if ($role === null) {
+            $first = $payload['members'][0];
+
+            $role = [
+                'id' => $first['role_id'],
+                'name' => $first['role'],
+                'color' => null,
+            ];
+        } else {
+            $role = [
+                'id' => $role['id'],
+                'name' => $role['name'],
+                'color' => $role['color'],
+            ];
+        }
+
+        $members = array_map(
+            fn (array $member): array => [
+                'discord_id' => $member['discord_id'],
+                'name' => $member['name'],
+                'username' => $member['username'],
+                'avatar' => $member['avatar'],
+            ],
+            $payload['members'],
+        );
+
+        return [
+            'role' => $role,
+            'members' => $members,
+        ];
+    }
+
     public function resolveAvatarUrlForUser(string $discordUserId): string
     {
         $token = $this->botToken();
@@ -397,6 +500,184 @@ class DiscordBotService
             : ((int) $discriminator % 5);
 
         return "https://cdn.discordapp.com/embed/avatars/{$index}.png?size=256";
+    }
+
+    /**
+     * @return array<string, array{id: string, name: string, color: string|null, position: int}>|null
+     */
+    private function fetchGuildRolesIndex(string $guildId): ?array
+    {
+        try {
+            $response = Http::timeout(10)
+                ->withHeaders($this->headers())
+                ->get(self::API_BASE."/guilds/{$guildId}/roles");
+
+            if (! $response->successful()) {
+                Log::warning('Discord guild roles fetch failed', [
+                    'guild_id' => $guildId,
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+
+                return null;
+            }
+
+            /** @var list<array<string, mixed>> $roles */
+            $roles = $response->json();
+            $index = [];
+
+            foreach ($roles as $role) {
+                $id = (string) ($role['id'] ?? '');
+                if ($id === '') {
+                    continue;
+                }
+
+                $color = isset($role['color']) && (int) $role['color'] > 0
+                    ? sprintf('#%06X', (int) $role['color'])
+                    : null;
+
+                $index[$id] = [
+                    'id' => $id,
+                    'name' => (string) ($role['name'] ?? 'Role'),
+                    'color' => $color,
+                    'position' => (int) ($role['position'] ?? 0),
+                ];
+            }
+
+            return $index;
+        } catch (\Throwable $e) {
+            Log::warning('Discord guild roles fetch exception', [
+                'guild_id' => $guildId,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Assign each member to the first configured role they hold (preserves env order).
+     *
+     * @param  list<string>  $roleIds
+     * @param  array<string, array{id: string, name: string, color: string|null, position: int}>  $rolesIndex
+     * @return array<string, list<array{discord_id: string, name: string, username: string, avatar: string, role: string, role_id: string}>>|null
+     */
+    private function fetchGuildMembersGroupedByRoles(string $guildId, array $roleIds, array $rolesIndex): ?array
+    {
+        $groups = [];
+        foreach ($roleIds as $roleId) {
+            if (isset($rolesIndex[$roleId])) {
+                $groups[$roleId] = [];
+            }
+        }
+
+        if ($groups === []) {
+            return [];
+        }
+
+        $assigned = [];
+        $after = null;
+        $pages = 0;
+
+        try {
+            do {
+                $query = ['limit' => 1000];
+                if ($after !== null) {
+                    $query['after'] = $after;
+                }
+
+                $response = Http::timeout(15)
+                    ->withHeaders($this->headers())
+                    ->get(self::API_BASE."/guilds/{$guildId}/members", $query);
+
+                if (! $response->successful()) {
+                    Log::warning('Discord guild members fetch failed', [
+                        'guild_id' => $guildId,
+                        'status' => $response->status(),
+                        'body' => $response->body(),
+                    ]);
+
+                    return null;
+                }
+
+                /** @var list<array<string, mixed>> $chunk */
+                $chunk = $response->json();
+
+                if ($chunk === []) {
+                    break;
+                }
+
+                foreach ($chunk as $member) {
+                    $memberRoles = $member['roles'] ?? [];
+                    if (! is_array($memberRoles)) {
+                        continue;
+                    }
+
+                    $memberRoleSet = array_fill_keys(array_map('strval', $memberRoles), true);
+
+                    /** @var array<string, mixed> $user */
+                    $user = is_array($member['user'] ?? null) ? $member['user'] : [];
+                    $discordId = (string) ($user['id'] ?? '');
+
+                    if ($discordId === '' || isset($assigned[$discordId])) {
+                        continue;
+                    }
+
+                    foreach ($roleIds as $roleId) {
+                        if (! isset($groups[$roleId], $memberRoleSet[$roleId])) {
+                            continue;
+                        }
+
+                        $role = $rolesIndex[$roleId];
+                        $username = (string) ($user['username'] ?? '');
+                        $displayName = (string) ($member['nick'] ?? $user['global_name'] ?? $user['username'] ?? 'Member');
+
+                        $groups[$roleId][] = [
+                            'discord_id' => $discordId,
+                            'name' => $displayName,
+                            'username' => $username,
+                            'avatar' => $this->avatarUrlFromUserPayload($user),
+                            'role' => $role['name'],
+                            'role_id' => $role['id'],
+                        ];
+                        $assigned[$discordId] = true;
+                        break;
+                    }
+                }
+
+                $last = $chunk[array_key_last($chunk)];
+                $after = (string) ($last['user']['id'] ?? '');
+                $pages++;
+            } while (count($chunk) === 1000 && $pages < 20);
+        } catch (\Throwable $e) {
+            Log::warning('Discord guild members fetch exception', [
+                'guild_id' => $guildId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @param  array<string, mixed>  $user
+     */
+    private function avatarUrlFromUserPayload(array $user): string
+    {
+        $discordId = (string) ($user['id'] ?? '');
+        $avatarHash = isset($user['avatar']) ? (string) $user['avatar'] : '';
+
+        if ($discordId !== '' && $avatarHash !== '') {
+            $extension = str_starts_with($avatarHash, 'a_') ? 'gif' : 'png';
+
+            return "https://cdn.discordapp.com/avatars/{$discordId}/{$avatarHash}.{$extension}?size=256";
+        }
+
+        $discriminator = isset($user['discriminator']) ? (string) $user['discriminator'] : '0';
+
+        return $this->defaultEmbedAvatarUrl($discordId, $discriminator);
     }
 
     private function botToken(): ?string
