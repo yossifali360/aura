@@ -63,5 +63,11 @@ class ApplicationRequest extends FormRequest
         if ($this->input('type') === ApplicationType::Police->value && ! $this->filled('experience')) {
             $this->merge(['experience' => '']);
         }
+
+        if ($this->input('type') === ApplicationType::Server->value && $this->filled('experience')) {
+            $steamLink = preg_replace('#/home/?$#i', '', trim((string) $this->input('experience'))) ?? '';
+
+            $this->merge(['experience' => $steamLink]);
+        }
     }
 }

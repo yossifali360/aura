@@ -17,6 +17,7 @@ import { fetchMyApplication, submitApplication } from '@/api/applications'
 import {
   applicationInitialValues,
   createApplicationSchema,
+  normalizeSteamLink,
 } from '@/schemas/applicationSchema'
 import { mapBackendValidationErrors } from '@/utils/validationErrors'
 import type { Application, ApplicationType } from '@/types'
@@ -53,7 +54,7 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
           type,
           ...(isServerForm ? { real_name: values.real_name.trim() } : {}),
           age: Number(values.age),
-          experience: values.experience,
+          experience: isServerForm ? normalizeSteamLink(values.experience) : values.experience,
           character_concept: values.character_concept,
           why_join: values.why_join,
           rules_accepted: values.rules_accepted,

@@ -472,7 +472,9 @@
     "loading": "Loading...",
     "error": "Something went wrong. Please try again.",
     "applications_closed": "Applications are currently closed.",
-    "applications_closed_desc": "Applications are not open right now. You can still read the rules above and check back later."
+    "applications_closed_desc": "Applications are not open right now. You can still read the rules above and check back later.",
+    "see_more": "See more",
+    "see_less": "See less"
   },
   "team": {
     "meet_team": "View our team",

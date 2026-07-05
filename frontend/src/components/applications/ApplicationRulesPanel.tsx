@@ -25,7 +25,7 @@ export function ApplicationRulesPanel({ type }: ApplicationRulesPanelProps) {
           <p className="text-sm text-slate-600 dark:text-slate-400">{content.subtitle}</p>
         </div>
       </div>
-      <RulesMarkdown content={content.content} />
+      <RulesMarkdown content={content.content} collapsible previewItems={3} />
     </Card>
   )
 }

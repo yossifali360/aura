@@ -2,7 +2,11 @@ import * as Yup from 'yup'
 import type { TFunction } from 'i18next'
 import type { ApplicationType } from '@/types'
 
-const STEAM_LINK_REGEX = /^https?:\/\/(www\.)?steamcommunity\.com\/(profiles|id)\//i
+const STEAM_LINK_REGEX = /^https?:\/\/(www\.)?steamcommunity\.com\/(profiles|id)\/[^/?#]+/i
+
+export function normalizeSteamLink(value: string): string {
+  return value.trim().replace(/\/home\/?$/i, '')
+}
 
 export interface ApplicationFormValues {
   real_name: string
@@ -65,6 +69,7 @@ export function createApplicationSchema(t: TFunction, type: ApplicationType = 's
         .max(100, t('validation.character_name_max')),
       experience: Yup.string()
         .trim()
+        .transform((value) => normalizeSteamLink(value ?? ''))
         .required(t('validation.steam_link_required'))
         .max(500, t('validation.steam_link_max'))
         .url(t('validation.steam_link_invalid'))
