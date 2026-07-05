@@ -133,7 +133,7 @@ export function RulesMarkdown({
         <RulesSections sections={visibleSections} />
         {canCollapse && !expanded && (
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white/70 via-white/40 to-transparent dark:from-slate-900/60 dark:via-slate-900/30"
+            className="pointer-events-none cursor-pointer absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white/70 via-white/40 to-transparent dark:from-slate-900/60 dark:via-slate-900/30"
             aria-hidden
           />
         )}
@@ -143,7 +143,7 @@ export function RulesMarkdown({
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-aura-600 transition hover:text-aura-700 dark:text-aura-400 dark:hover:text-aura-300"
+          className="mt-4 inline-flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-aura-600 transition hover:text-aura-700 dark:text-aura-400 dark:hover:text-aura-300"
         >
           {expanded ? t('common.see_less') : t('common.see_more')}
           <ChevronDown className={cn('size-4 transition-transform', expanded && 'rotate-180')} />
