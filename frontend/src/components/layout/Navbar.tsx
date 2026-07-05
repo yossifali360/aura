@@ -47,9 +47,11 @@ export function Navbar() {
   const { hasProfile: hasPoliceProfile } = usePoliceProfile()
   const location = useLocation()
   const headerRef = useRef<HTMLElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
   const applyRef = useRef<HTMLDivElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [applyOpen, setApplyOpen] = useState(false)
+  const [navHeight, setNavHeight] = useState(0)
   const isRtl = true
 
   const applyLinks = [
@@ -89,9 +91,41 @@ export function Navbar() {
   }, [applyOpen])
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    const bar = barRef.current
+    if (!bar) return
+
+    const syncNavHeight = () => {
+      const height = bar.offsetHeight
+      setNavHeight(height)
+      document.documentElement.style.setProperty('--nav-height', `${height}px`)
+    }
+
+    syncNavHeight()
+
+    const observer = new ResizeObserver(syncNavHeight)
+    observer.observe(bar)
+
+    window.addEventListener('resize', syncNavHeight)
+
     return () => {
-      document.body.style.overflow = ''
+      observer.disconnect()
+      window.removeEventListener('resize', syncNavHeight)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const html = document.documentElement
+    const previousOverflow = html.style.overflow
+    const previousOverscroll = html.style.overscrollBehavior
+
+    html.style.overflow = 'hidden'
+    html.style.overscrollBehavior = 'none'
+
+    return () => {
+      html.style.overflow = previousOverflow
+      html.style.overscrollBehavior = previousOverscroll
     }
   }, [mobileOpen])
 
@@ -102,11 +136,12 @@ export function Navbar() {
   const isApplyActive = applyLinks.some((link) => location.pathname === link.to)
 
   return (
-    <header
-      ref={headerRef}
-      className="sticky top-0 z-50 border-b border-slate-200/50 bg-white/80 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-950/80"
-    >
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+    <>
+      <header
+        ref={headerRef}
+        className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/50 bg-white/80 backdrop-blur-xl dark:border-slate-800/50 dark:bg-slate-950/80"
+      >
+        <div ref={barRef} className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
         <Link to="/" className="nav-brand flex shrink-0 items-center gap-2 font-display text-lg font-bold">
           <img src="/image.png" alt="Aura Cfw" className="size-9 object-contain" />
           <span className="neon-text hidden sm:inline">Aura Cfw</span>
@@ -207,75 +242,91 @@ export function Navbar() {
             {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </Button>
         </div>
-      </div>
+        </div>
+      </header>
 
       {mobileOpen && (
-        <div className="border-t border-slate-200/50 bg-white/95 px-4 py-4 dark:border-slate-800/50 dark:bg-slate-950/95 lg:hidden">
-          <nav className="flex flex-col gap-1" aria-label={t('nav.home')}>
-            <NavLink to="/" className={navLinkClass} end onClick={() => setMobileOpen(false)}>
-              {t('nav.home')}
-            </NavLink>
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            aria-label={t('nav.close_menu')}
+            onClick={() => setMobileOpen(false)}
+          />
 
-            <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase tracking-wide text-slate-400">
-              {t('nav.apply_menu')}
-            </p>
-            {applyLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={navLinkClass}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
+          <div
+            className="fixed inset-x-0 z-50 overflow-y-auto border-t border-slate-200/50 bg-white/95 px-4 py-4 dark:border-slate-800/50 dark:bg-slate-950/95 lg:hidden"
+            style={{
+              top: navHeight > 0 ? navHeight : '4rem',
+              maxHeight: navHeight > 0 ? `calc(100dvh - ${navHeight}px)` : 'calc(100dvh - 4rem)',
+            }}
+          >
+            <nav className="flex flex-col gap-1" aria-label={t('nav.home')}>
+              <NavLink to="/" className={navLinkClass} end onClick={() => setMobileOpen(false)}>
+                {t('nav.home')}
               </NavLink>
-            ))}
 
-            <NavLink to="/rules" className={navLinkClass} onClick={() => setMobileOpen(false)}>
-              {t('nav.rules')}
-            </NavLink>
-            {hasPoliceProfile && (
-              <NavLink to="/police/profile" className={navLinkClass} onClick={() => setMobileOpen(false)}>
-                {t('nav.police_profile')}
-              </NavLink>
-            )}
-            {user?.is_admin && (
-              <NavLink to="/admin" className={navLinkClass} onClick={() => setMobileOpen(false)}>
-                {t('nav.admin')}
-              </NavLink>
-            )}
-          </nav>
+              <p className="px-3 pt-2 pb-1 text-xs font-bold uppercase tracking-wide text-slate-400">
+                {t('nav.apply_menu')}
+              </p>
+              {applyLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={navLinkClass}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
 
-          <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800 sm:hidden">
-            {authPending ? (
-              <div className="flex items-center gap-2">
-                <div className="size-9 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
-                <div className="h-4 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
-              </div>
-            ) : user ? (
-              <div className="flex items-center justify-between gap-3">
+              <NavLink to="/rules" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+                {t('nav.rules')}
+              </NavLink>
+              {hasPoliceProfile && (
+                <NavLink to="/police/profile" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+                  {t('nav.police_profile')}
+                </NavLink>
+              )}
+              {user?.is_admin && (
+                <NavLink to="/admin" className={navLinkClass} onClick={() => setMobileOpen(false)}>
+                  {t('nav.admin')}
+                </NavLink>
+              )}
+            </nav>
+
+            <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-800 sm:hidden">
+              {authPending ? (
                 <div className="flex items-center gap-2">
-                  <DiscordAvatar
-                    src={user.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
-                    fallbackSrc={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
-                    alt={user.first_name}
-                    className="size-9 rounded-full ring-2 ring-aura-500/40"
-                  />
-                  <span className="text-sm font-semibold">{user.first_name}</span>
+                  <div className="size-9 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
+                  <div className="h-4 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => { logout(); setMobileOpen(false) }}>
-                  <LogOut className="size-4" />
-                  {t('nav.logout')}
+              ) : user ? (
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <DiscordAvatar
+                      src={user.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
+                      fallbackSrc={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.first_name)}&background=dc2626&color=fff`}
+                      alt={user.first_name}
+                      className="size-9 rounded-full ring-2 ring-aura-500/40"
+                    />
+                    <span className="text-sm font-semibold">{user.first_name}</span>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => { logout(); setMobileOpen(false) }}>
+                    <LogOut className="size-4" />
+                    {t('nav.logout')}
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="discord" size="sm" onClick={handleLogin}>
+                  <LogIn className="size-4" />
+                  {t('nav.login')}
                 </Button>
-              </div>
-            ) : (
-              <Button variant="discord" size="sm" onClick={handleLogin}>
-                <LogIn className="size-4" />
-                {t('nav.login')}
-              </Button>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
-    </header>
+    </>
   )
 }

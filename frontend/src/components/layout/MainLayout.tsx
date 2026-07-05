@@ -5,7 +5,7 @@ import { PageTransition } from '@/components/animation/PageTransition'
 
 export function MainLayout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col pt-[var(--nav-height,4rem)]">
       <Navbar />
       <main className="flex-1">
         <PageTransition>
