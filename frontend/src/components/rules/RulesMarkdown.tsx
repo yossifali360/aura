@@ -87,7 +87,7 @@ function RulesSections({ sections }: { sections: ParsedSection[] }) {
             <h2 className="font-display text-xl font-bold">{section.title}</h2>
           )}
           {section.items.length > 0 && (
-            <ul className={cn('space-y-3', section.title ? 'mt-4' : undefined)}>
+            <ul className={cn('space-y-3 p-4 rounded-lg', section.title ? 'mt-4' : undefined)}>
               {section.items.map((item, itemIndex) => (
                 <li key={itemIndex} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
                   <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-aura-500" />
