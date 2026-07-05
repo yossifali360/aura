@@ -30,6 +30,24 @@ class ApplicationRequest extends FormRequest
             ];
         }
 
+        if ($type === ApplicationType::Server->value) {
+            return [
+                'type' => ['required', 'string', Rule::enum(ApplicationType::class)],
+                'real_name' => ['required', 'string', 'max:100'],
+                'age' => ['required', 'integer', 'min:17', 'max:99'],
+                'character_concept' => ['required', 'string', 'max:100'],
+                'experience' => [
+                    'required',
+                    'string',
+                    'max:500',
+                    'url',
+                    'regex:/steamcommunity\.com\/(profiles|id)\//i',
+                ],
+                'why_join' => ['required', 'string', 'max:3000'],
+                'rules_accepted' => ['required', 'accepted'],
+            ];
+        }
+
         return [
             'type' => ['required', 'string', Rule::enum(ApplicationType::class)],
             'age' => ['required', 'integer', 'min:17', 'max:99'],

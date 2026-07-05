@@ -30,16 +30,7 @@ class DiscordWebhookService
                     [
                         'title' => "New {$type->label()} Application",
                         'color' => $type->color(),
-                        'fields' => [
-                            ['name' => 'Applicant', 'value' => "{$user->first_name} (@{$user->username})", 'inline' => true],
-                            ['name' => 'Discord ID', 'value' => $user->discord_id, 'inline' => true],
-                            ['name' => 'Age', 'value' => (string) $application->age, 'inline' => true],
-                            ['name' => 'Experience', 'value' => $this->truncate($application->experience)],
-                            ['name' => 'Character / Background', 'value' => $this->truncate($application->character_concept)],
-                            ['name' => 'Why Join', 'value' => $this->truncate($application->why_join)],
-                            ['name' => 'Status', 'value' => ucfirst($application->status), 'inline' => true],
-                            ['name' => 'Application ID', 'value' => "#{$application->id}", 'inline' => true],
-                        ],
+                        'fields' => $this->applicationFields($application, $user, $type),
                         'thumbnail' => $user->avatar ? ['url' => $user->avatar] : null,
                         'timestamp' => $application->created_at?->toIso8601String(),
                     ],
@@ -57,6 +48,44 @@ class DiscordWebhookService
             ApplicationType::Ems => env('DISCORD_WEBHOOK_EMS') ?: env('DISCORD_WEBHOOK_URL'),
             ApplicationType::Server => env('DISCORD_WEBHOOK_URL'),
         };
+    }
+
+    /**
+     * @return list<array{name: string, value: string, inline?: bool}>
+     */
+    private function applicationFields(Application $application, User $user, ApplicationType $type): array
+    {
+        $base = [
+            ['name' => 'Applicant', 'value' => "{$user->first_name} (@{$user->username})", 'inline' => true],
+            ['name' => 'Discord ID', 'value' => $user->discord_id, 'inline' => true],
+            ['name' => 'Age', 'value' => (string) $application->age, 'inline' => true],
+        ];
+
+        $details = match ($type) {
+            ApplicationType::Server => [
+                ['name' => 'Real Name', 'value' => $this->truncate((string) ($application->real_name ?? ''))],
+                ['name' => 'City Character Name', 'value' => $this->truncate($application->character_concept)],
+                ['name' => 'Steam Link', 'value' => $this->truncate($application->experience)],
+                ['name' => 'Character Story', 'value' => $this->truncate($application->why_join)],
+            ],
+            ApplicationType::Police => [
+                ['name' => 'Character Name', 'value' => $this->truncate($application->character_concept)],
+                ['name' => 'Why Accept', 'value' => $this->truncate($application->why_join)],
+                ['name' => 'Police Experience', 'value' => $this->truncate($application->experience ?: '—')],
+            ],
+            ApplicationType::Ems => [
+                ['name' => 'Experience', 'value' => $this->truncate($application->experience)],
+                ['name' => 'Character / Background', 'value' => $this->truncate($application->character_concept)],
+                ['name' => 'Why Join', 'value' => $this->truncate($application->why_join)],
+            ],
+        };
+
+        return [
+            ...$base,
+            ...$details,
+            ['name' => 'Status', 'value' => ucfirst($application->status), 'inline' => true],
+            ['name' => 'Application ID', 'value' => "#{$application->id}", 'inline' => true],
+        ];
     }
 
     private function truncate(string $text, int $max = 1000): string

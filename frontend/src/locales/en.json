@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "apply": "Whitelist",
+    "apply": "City Application",
     "apply_menu": "Apply",
     "police": "Police",
     "ems": "EMS",
@@ -48,7 +48,7 @@
       },
       {
         "title": "Submit your application",
-        "desc": "Apply for whitelist, Police, or EMS. Tell us about your character and RP experience."
+        "desc": "Apply for city access, Police, or EMS. Share your character details and information."
       },
       {
         "title": "Get approved & play",
@@ -59,9 +59,9 @@
     "departments_subtitle": "Whether you're new to the city or ready for a dedicated faction role, we have a place for you.",
     "departments": {
       "whitelist": {
-        "title": "Server Whitelist",
-        "desc": "Your entry point to Aura Cfw. Build a character, find work, and explore Los Santos with the community.",
-        "apply": "Apply for Whitelist",
+        "title": "City Application",
+        "desc": "Your entry point to Aura Cfw. Build a realistic character, submit your application, and start your life in Los Santos.",
+        "apply": "Apply for City",
         "rules": "View Rules"
       },
       "police": {
@@ -94,11 +94,19 @@
     ]
   },
   "apply": {
-    "title": "Server Application",
-    "subtitle": "Tell us about yourself and your character. Applications are reviewed within 48 hours.",
+    "title": "City Application",
+    "subtitle": "Complete the form below to apply. Applications are reviewed within 48 hours.",
     "login_required": "Sign in with Discord to submit your application.",
+    "real_name": "Real Name",
+    "real_name_placeholder": "Your full legal name",
     "age": "Age",
     "age_placeholder": "Must be 17 or older",
+    "city_character_name": "City Character Name",
+    "city_character_name_placeholder": "Your in-city character name — must be realistic (e.g. John Miller)",
+    "steam_link": "Steam Profile Link",
+    "steam_link_placeholder": "https://steamcommunity.com/profiles/...",
+    "character_story": "Character Story",
+    "character_story_placeholder": "Write your character's background, personality, and goals in the city...",
     "experience": "Roleplay Experience",
     "experience_placeholder": "Describe your RP experience on FiveM or other platforms...",
     "character": "Character Concept",
@@ -169,7 +177,7 @@
     "title": "Admin Dashboard",
     "subtitle": "Manage applications, users, rules, and settings",
     "tabs": {
-      "whitelist": "Whitelist",
+      "whitelist": "City Application",
       "police": "Police",
       "ems": "EMS",
       "rules": "Rules",
@@ -189,7 +197,7 @@
       "all_statuses": "All statuses"
     },
     "types": {
-      "server": "Whitelist",
+      "server": "City Application",
       "police": "Police",
       "ems": "EMS"
     },
@@ -225,7 +233,7 @@
     },
     "roles": {
       "super_admin": "Super Admin",
-      "whitelist_admin": "Whitelist Admin",
+      "whitelist_admin": "City Application Admin",
       "police_admin": "Police Admin",
       "ems_admin": "EMS Admin",
       "users_admin": "Users Admin"
@@ -236,13 +244,13 @@
       "closed": "Closed",
       "enable": "Enable Applications",
       "disable": "Disable Applications",
-      "server_desc": "Allow users to apply for server whitelist.",
+      "server_desc": "Allow users to apply for city access.",
       "police_desc": "Allow users to apply for the Police Department.",
       "ems_desc": "Allow users to apply for EMS."
     },
     "rules": {
       "editor_title": "Edit Server Rules",
-      "editor_desc": "Edit rules for Whitelist, Police, and EMS. Users always see these on apply pages.",
+      "editor_desc": "Edit rules for City Application, Police, and EMS. Users always see these on apply pages.",
       "english": "English",
       "arabic": "Arabic",
       "page_title": "Page title",
@@ -538,6 +546,15 @@
     "age_required": "Age is required.",
     "age_min": "You must be at least 17 years old.",
     "age_max": "Age must be 99 or less.",
+    "real_name_required": "Real name is required.",
+    "real_name_max": "Real name must be 100 characters or less.",
+    "city_character_name_required": "City character name is required.",
+    "city_character_name_min": "City character name must be at least 2 characters.",
+    "steam_link_required": "Steam profile link is required.",
+    "steam_link_max": "Steam link must be 500 characters or less.",
+    "steam_link_invalid": "Enter a valid Steam profile URL (steamcommunity.com/profiles or /id).",
+    "character_story_required": "Character story is required.",
+    "character_story_max": "Character story must be 3000 characters or less.",
     "experience_required": "Roleplay experience is required.",
     "experience_max": "Experience must be 2000 characters or less.",
     "character_required": "Character concept is required.",

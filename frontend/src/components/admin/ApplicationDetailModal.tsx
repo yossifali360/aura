@@ -15,10 +15,11 @@ const I18N_KEY: Record<ApplicationType, 'apply' | 'apply_police' | 'apply_ems'> 
 
 const FIELDS: Record<ApplicationType, { key: keyof Application; labelKey: string }[]> = {
   server: [
+    { key: 'real_name', labelKey: 'real_name' },
     { key: 'age', labelKey: 'age' },
-    { key: 'experience', labelKey: 'experience' },
-    { key: 'character_concept', labelKey: 'character' },
-    { key: 'why_join', labelKey: 'why_join' },
+    { key: 'character_concept', labelKey: 'city_character_name' },
+    { key: 'experience', labelKey: 'steam_link' },
+    { key: 'why_join', labelKey: 'character_story' },
     { key: 'rules_accepted', labelKey: 'rules_accept' },
   ],
   police: [

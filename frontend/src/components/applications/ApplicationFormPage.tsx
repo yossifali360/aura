@@ -39,6 +39,7 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
 
   const isEnabled = settings?.[type] ?? false
   const isPoliceForm = type === 'police'
+  const isServerForm = type === 'server'
   const validationSchema = useMemo(() => createApplicationSchema(t, type), [t, type])
 
   const formik = useFormik({
@@ -50,6 +51,7 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
       try {
         const result = await submitApplication({
           type,
+          ...(isServerForm ? { real_name: values.real_name.trim() } : {}),
           age: Number(values.age),
           experience: values.experience,
           character_concept: values.character_concept,
@@ -152,7 +154,7 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
           </Badge>
           {existingApp.character_concept && (
             <p className="mt-4 text-sm text-slate-600 dark:text-slate-400">
-              {isPoliceForm
+              {isPoliceForm || isServerForm
                 ? existingApp.character_concept
                 : `${existingApp.character_concept.slice(0, 120)}...`}
             </p>
@@ -174,6 +176,18 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
       ) : (
         <Card glow>
           <form onSubmit={formik.handleSubmit} noValidate className="space-y-5">
+            {isServerForm && (
+              <Input
+                id={`${type}-real_name`}
+                name="real_name"
+                label={t(`${i18nKey}.real_name`)}
+                placeholder={t(`${i18nKey}.real_name_placeholder`)}
+                value={formik.values.real_name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={(formik.touched.real_name || formik.submitCount > 0) ? formik.errors.real_name : undefined}
+              />
+            )}
             <Input
               id={`${type}-age`}
               name="age"
@@ -218,6 +232,40 @@ export function ApplicationFormPage({ type, i18nKey }: ApplicationFormPageProps)
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={(formik.touched.experience || formik.submitCount > 0) ? formik.errors.experience : undefined}
+                />
+              </>
+            ) : isServerForm ? (
+              <>
+                <Input
+                  id={`${type}-character`}
+                  name="character_concept"
+                  label={t(`${i18nKey}.city_character_name`)}
+                  placeholder={t(`${i18nKey}.city_character_name_placeholder`)}
+                  value={formik.values.character_concept}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.character_concept || formik.submitCount > 0) ? formik.errors.character_concept : undefined}
+                />
+                <Input
+                  id={`${type}-steam`}
+                  name="experience"
+                  type="url"
+                  label={t(`${i18nKey}.steam_link`)}
+                  placeholder={t(`${i18nKey}.steam_link_placeholder`)}
+                  value={formik.values.experience}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.experience || formik.submitCount > 0) ? formik.errors.experience : undefined}
+                />
+                <Textarea
+                  id={`${type}-story`}
+                  name="why_join"
+                  label={t(`${i18nKey}.character_story`)}
+                  placeholder={t(`${i18nKey}.character_story_placeholder`)}
+                  value={formik.values.why_join}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={(formik.touched.why_join || formik.submitCount > 0) ? formik.errors.why_join : undefined}
                 />
               </>
             ) : (

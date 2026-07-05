@@ -22,6 +22,7 @@ export interface User {
 export interface Application {
   id: number
   type: ApplicationType
+  real_name?: string | null
   age: number
   experience: string
   character_concept: string
@@ -33,6 +34,7 @@ export interface Application {
 
 export interface ApplicationFormData {
   type: ApplicationType
+  real_name?: string
   age: number
   experience: string
   character_concept: string

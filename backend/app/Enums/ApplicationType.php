@@ -13,7 +13,7 @@ enum ApplicationType: string
     public function label(): string
     {
         return match ($this) {
-            self::Server => 'Server Whitelist',
+            self::Server => 'City Application',
             self::Police => 'Police Department',
             self::Ems => 'EMS / Medical',
         };
@@ -22,7 +22,7 @@ enum ApplicationType: string
     public function labelAr(): string
     {
         return match ($this) {
-            self::Server => 'القائمة البيضاء',
+            self::Server => 'تقديم المدينة',
             self::Police => 'الشرطة',
             self::Ems => 'الإسعاف',
         };

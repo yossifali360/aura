@@ -12,6 +12,7 @@ class Application extends Model
     protected $fillable = [
         'user_id',
         'type',
+        'real_name',
         'age',
         'experience',
         'character_concept',
